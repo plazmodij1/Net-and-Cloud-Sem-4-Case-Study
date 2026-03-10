@@ -9,15 +9,12 @@ resource "aws_vpc" "public" {
 resource "aws_vpc" "private" {
     cidr_block = var.cidr_block_vpc_priv
 
+    enable_dns_hostnames = true
+    enable_dns_support = true
+
+
     tags = {
         Name = "${var.dev}-vpc-priv"
     }
 }
 
-resource "aws_internet_gateway" "igw" {
-    vpc_id = aws_vpc.public.id
-    
-    tags = {
-        Name = "${var.dev}-igw"
-    }
-}

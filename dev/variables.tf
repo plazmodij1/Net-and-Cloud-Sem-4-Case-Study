@@ -6,11 +6,6 @@ variable "db-username"{
     default = "MarkoAdminStudent"
 }
 
-variable "db-password" {
-    default = "Kurac123."
-}
-
-
 variable "private_subnet_cidrs" {
     type = map(object({
         cidr_block = string

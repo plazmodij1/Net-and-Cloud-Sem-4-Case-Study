@@ -1,3 +1,11 @@
+resource "aws_internet_gateway" "igw" {
+    vpc_id = aws_vpc.public.id
+    
+    tags = {
+        Name = "${var.dev}-igw"
+    }
+}
+
 resource "aws_ec2_transit_gateway" "main" {
     description = "Main gateway between VPCs"
 
@@ -28,3 +36,4 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "private" {
         Name = "${var.dev}-tr-gt-private-attachment"
     }
 }
+

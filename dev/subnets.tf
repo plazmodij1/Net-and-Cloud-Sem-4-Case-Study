@@ -23,5 +23,4 @@ resource "aws_db_subnet_group" "main" {
     tags = {
         Name = "${var.dev}-db-subnet-group"
     }
-  
 }
