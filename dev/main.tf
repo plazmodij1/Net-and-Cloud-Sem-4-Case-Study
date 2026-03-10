@@ -66,6 +66,9 @@ resource "aws_lambda_function" "main"{
     handler         = "hello.handler"
     runtime         = "nodejs22.x"
 
+    source_code_hash    = filebase64sha256("./hello.zip")
+    timeout             = 15
+
     vpc_config {
         security_group_ids  = [aws_security_group.lambda.id]
         subnet_ids          = [aws_subnet.private["app"].id]

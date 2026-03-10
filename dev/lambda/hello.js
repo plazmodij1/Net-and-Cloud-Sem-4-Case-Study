@@ -26,8 +26,9 @@ exports.handler = async (event) => {
             });
         }
 
-        // 1. Create the table if it does not exist
-        await pool.execute(`
+        // 1. Create the table using .query() instead of .execute()
+        console.log("Ensuring users table exists...");
+        await pool.query(`
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
@@ -35,14 +36,16 @@ exports.handler = async (event) => {
             )
         `);
 
-        // 2. Insert a piece of dummy data (IGNORE prevents duplicate errors on reload)
-        await pool.execute(`
+        // 2. Insert dummy data using .query()
+        console.log("Inserting dummy data...");
+        await pool.query(`
             INSERT IGNORE INTO users (id, name, email) 
             VALUES (1, 'Marko Cloud Student', 'marko@example.com')
         `);
 
-        // 3. Now query the data!
-        const [rows] = await pool.execute('SELECT * FROM users LIMIT 5');
+        // 3. Query the data using .query() just to be safe!
+        console.log("Fetching data...");
+        const [rows] = await pool.query('SELECT * FROM users LIMIT 5');
         
         return {
             statusCode: 200,
