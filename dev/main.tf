@@ -22,6 +22,10 @@ resource "aws_rds_cluster" "main" {
     
     enabled_cloudwatch_logs_exports = ["error", "general", "slowquery"]
 
+    lifecycle {
+        ignore_changes = [availability_zones]
+    }
+
     tags = {
         Environment = "${var.dev}"
         Name        = "RDS-Instance"
@@ -136,22 +140,5 @@ resource "aws_instance" "vpn" {
     tags = {
         Name = "${var.dev}-vpn-instance"
     }
-    user_data = <<-EOF
-                #!/bin/bash
-                # 1. Download the script
-                curl -O https://raw.githubusercontent.com/angristan/wireguard-install/master/wireguard-install.sh
-                chmod +x wireguard-install.sh
-                
-                # 2. Set environment variables for a totally silent install
-                export AUTO_INSTALL=y
-                export ENDPOINT=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
-                export CLIENT_NAME=mylaptop
-                
-                # 3. Run the installer
-                AUTO_INSTALL=y ./wireguard-install.sh
-                
-                # 4. Move the config file to the ubuntu user's folder so you can download it securely!
-                mv /root/mylaptop.conf /home/ubuntu/mylaptop.conf
-                chown ubuntu:ubuntu /home/ubuntu/mylaptop.conf
-                EOF
+    user_data = file("vpn-setup.sh")
 }

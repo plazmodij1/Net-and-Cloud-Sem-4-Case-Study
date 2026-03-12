@@ -1,6 +1,9 @@
 resource "aws_vpc" "public" {
     cidr_block = var.cidr_block_vpc_public
 
+    enable_dns_support   = true
+    enable_dns_hostnames = true
+
     tags = {
         Name = "${var.dev}-vpc-pub"
     }

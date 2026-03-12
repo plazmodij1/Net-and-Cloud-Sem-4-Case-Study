@@ -122,38 +122,3 @@ resource "aws_iam_role_policy_attachment" "ecs_task" {
     role        = aws_iam_role.ecs_task.name
     policy_arn  = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
 }
-
-#resource "aws_iam_policy" "lambda_data_api"{
-#    name    = "${var.dev}-lambda-data-api-policy"
-#    policy  = jsonencode({
-#    Version = "2012-10-17"
-#    Statement = [
-#        {
-#        Effect = "Allow"
-#        Action = [
-#            "rds-data:ExecuteStatement",
-#            "rds-data:BatchExecuteStatement",
-#            "rds-data:BeginTransaction",
-#            "rds-data:CommitTransaction",
-#            "rds-data:RollbackTransaction"
-#            ]
-#        Resource = aws_rds_cluster.main.arn
-#        },
-#        {
-#        Effect = "Allow"
-#        Action = "secretsmanager:GetSecretValue"
-#        Resource = aws_secretsmanager_secret.db_cred.arn
-#        }
-#    ]
-#    })
-#}
-
-#resource "aws_iam_role_policy_attachment" "lambda_data_api" {
-#    role       = aws_iam_role.lambda.name
-#    policy_arn = aws_iam_policy.lambda_data_api.arn
-#}
-
-#resource "aws_iam_role_policy_attachment" "lambda_logging"{
-#    role = aws_iam_role.lambda_logging.name
-#    policy_arn = aws_iam_role_policy.lambda_logging.arn
-#}
