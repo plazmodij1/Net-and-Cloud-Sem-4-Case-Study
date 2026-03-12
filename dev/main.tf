@@ -9,8 +9,8 @@ resource "aws_rds_cluster" "main" {
     engine                  = "aurora-mysql"
     engine_version          = "8.0.mysql_aurora.3.10.3"
     availability_zones      = ["eu-central-1a", "eu-central-1b"]
-    database_name           = "mydatabase"
-    master_username         = var.db-username
+    database_name           = var.db_name
+    master_username         = var.db_username
     master_password         = random_password.db-pass.result
 
     deletion_protection     = false
@@ -31,7 +31,7 @@ resource "aws_rds_cluster" "main" {
 resource "aws_rds_cluster_instance" "writer" {
     identifier                  = "${var.dev}-aurora-writer"
     cluster_identifier          = aws_rds_cluster.main.id
-    instance_class              = "db.t3.medium"
+    instance_class              = var.instance
     engine                      = aws_rds_cluster.main.engine
     engine_version              = aws_rds_cluster.main.engine_version
     
@@ -77,7 +77,7 @@ resource "aws_lambda_function" "main"{
     environment {
         variables = {
             DB_HOST = aws_db_proxy.main.endpoint
-            DB_NAME = "mydatabase"
+            DB_NAME = var.db_name
             SECRET_ARN = aws_secretsmanager_secret.db_cred.arn
         }
     }
@@ -123,4 +123,35 @@ resource "aws_db_proxy_target" "aurora" {
     db_proxy_name = aws_db_proxy.main.name
     target_group_name = "default"
     db_cluster_identifier = aws_rds_cluster.main.id
+}
+
+resource "aws_instance" "vpn" {
+    ami                             = "ami-01f79b1e4a5c64257"
+    instance_type                   = "t3.micro"
+    subnet_id                       = aws_subnet.public["dmz-1"].id
+    associate_public_ip_address     = true
+    vpc_security_group_ids          = [aws_security_group.vpn.id]
+    key_name                        = "dev-vpn-key"
+
+    tags = {
+        Name = "${var.dev}-vpn-instance"
+    }
+    user_data = <<-EOF
+                #!/bin/bash
+                # 1. Download the script
+                curl -O https://raw.githubusercontent.com/angristan/wireguard-install/master/wireguard-install.sh
+                chmod +x wireguard-install.sh
+                
+                # 2. Set environment variables for a totally silent install
+                export AUTO_INSTALL=y
+                export ENDPOINT=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
+                export CLIENT_NAME=mylaptop
+                
+                # 3. Run the installer
+                AUTO_INSTALL=y ./wireguard-install.sh
+                
+                # 4. Move the config file to the ubuntu user's folder so you can download it securely!
+                mv /root/mylaptop.conf /home/ubuntu/mylaptop.conf
+                chown ubuntu:ubuntu /home/ubuntu/mylaptop.conf
+                EOF
 }

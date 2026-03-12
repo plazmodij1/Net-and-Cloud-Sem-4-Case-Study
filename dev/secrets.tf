@@ -17,7 +17,7 @@ resource "aws_secretsmanager_secret" "db_cred" {
 resource "aws_secretsmanager_secret_version" "db_cred_version"{
     secret_id       = aws_secretsmanager_secret.db_cred.id
     secret_string   = jsonencode({
-        username    = "${var.db-username}"
+        username    = "${var.db_username}"
         password    = random_password.db-pass.result
         host        = aws_rds_cluster.main.endpoint
         port        = "3306"

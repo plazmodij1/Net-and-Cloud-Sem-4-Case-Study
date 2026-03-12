@@ -1,0 +1,56 @@
+resource "aws_ecs_cluster" "grafana" {
+    name = "${var.dev}-grafana-cluster"
+}
+
+resource "aws_cloudwatch_log_group" "grafana" {
+    name = "/ecs/${var.dev}-grafana"
+    retention_in_days = 7
+}
+
+resource "aws_ecs_task_definition" "grafana" {
+    family                      = "${var.dev}-grafana-task"
+    network_mode                = "awsvpc"
+    requires_compatibilities    = ["FARGATE"]
+    cpu                         = 256
+    memory                      = 512
+    execution_role_arn          = aws_iam_role.ecs_execution.arn
+    task_role_arn               = aws_iam_role.ecs_task.arn
+
+    container_definitions = jsonencode([{
+        name        = "grafana"
+        image       = "322691663773.dkr.ecr.eu-central-1.amazonaws.com/dev-grafana-repo:latest"
+        essential   = true
+
+        portMappings = [{
+            containerPort   = 3000
+            hostPort        = 3000
+            protocol        = "tcp"
+            }]
+        logConfiguration = {
+            logDriver = "awslogs"
+            options = {
+                "awslogs-group"         = aws_cloudwatch_log_group.grafana.name
+                "awslogs-region"        = var.region
+                "awslogs-stream-prefix" = "ecs"
+            }
+        }
+    }])
+}
+
+resource "aws_ecs_service" "grafana" {
+    name            = "${var.dev}-grafana-service"
+    cluster         = aws_ecs_cluster.grafana.arn
+    task_definition = aws_ecs_task_definition.grafana.arn
+    launch_type     = "FARGATE"
+    desired_count   = 1
+
+    network_configuration {
+        subnets             = [aws_subnet.private["data-1"].id, aws_subnet.private["data-2"].id]
+        security_groups     = [aws_security_group.fargate.id]
+        assign_public_ip    = false
+    }
+
+    service_registries {
+        registry_arn = aws_service_discovery_service.grafana.arn
+    }
+}

@@ -2,8 +2,16 @@ variable  "region" {
     default = "eu-central-1"
 }
 
-variable "db-username"{
+variable "db_username"{
     default = "MarkoAdminStudent"
+}
+
+variable "db_name" {
+    default = "mydatabase"
+}
+
+variable "instance" {
+  default = "db.t3.medium"
 }
 
 variable "private_subnet_cidrs" {

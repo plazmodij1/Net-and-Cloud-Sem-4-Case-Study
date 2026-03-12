@@ -69,35 +69,63 @@ resource "aws_security_group" "db" {
     }
 }
 
+resource "aws_security_group" "fargate" {
+    name = "${var.dev}-fargate-sg"
+    vpc_id = aws_vpc.private.id
+
+    ingress {
+        from_port   = 3000
+        to_port     = 3000
+        protocol    = "tcp"
+        cidr_blocks = [var.cidr_block_vpc_public]
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+}
+
 resource "aws_security_group" "vpc_endpoints" {
     name    = "${var.dev}-vpc-endpoints-sg"
     vpc_id  = aws_vpc.private.id
 
     ingress {
-        description     = "Allow Lambda to access VPC Endpoints"
+        description     = "Allow Lambda and Fargate to access VPC Endpoints"
         from_port       = 443
         to_port         = 443
         protocol        = "tcp"
-        security_groups = [aws_security_group.lambda.id]
+        security_groups = [
+            aws_security_group.lambda.id,
+            aws_security_group.fargate.id
+        ]
     }
 }
 
-#resource "aws_security_group" "secrets_manager" {
-#    name = "${var.dev}-secrets-manager-sg"
-#    vpc_id = aws_vpc.private.id
-#
-#    ingress {
-#        description = "Allow inbound HTTPS for Secrets Manager"
-#        from_port = 443
-#        to_port = 443
-#        protocol = "tcp"
-#        cidr_blocks = [aws_vpc.private.cidr_block]
-#    }
-#
-#    egress {
-#        from_port = 0
-#        to_port = 0
-#        protocol = "-1"
-#        cidr_blocks = ["0.0.0.0/0"]
-#    }
-#}
+resource "aws_security_group" "vpn" {
+    name = "${var.dev}-vpn-sg"
+    vpc_id = aws_vpc.public.id
+
+    ingress {
+        from_port       = 22
+        to_port         = 22
+        protocol        = "tcp"
+        cidr_blocks     = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        from_port       = 51820
+        to_port         = 51820
+        protocol        = "udp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port       = 0
+        to_port         = 0
+        protocol        = "-1"
+        cidr_blocks     = ["0.0.0.0/0"]
+    }
+}
