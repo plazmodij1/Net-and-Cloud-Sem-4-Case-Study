@@ -20,7 +20,7 @@ resource "aws_secretsmanager_secret_version" "db_cred_version"{
         username    = "${var.db_username}"
         password    = random_password.db-pass.result
         host        = aws_rds_cluster.main.endpoint
-        port        = "3306"
+        port        = var.db_port
         dbname      = aws_rds_cluster.main.database_name
     })
 }

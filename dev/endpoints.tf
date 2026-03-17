@@ -46,3 +46,15 @@ resource "aws_vpc_endpoint" "grafana_logs" {
     subnet_ids          = [aws_subnet.private["data-1"].id, aws_subnet.private["data-2"].id]
     security_group_ids  = [aws_security_group.vpc_endpoints.id]
 }
+
+resource "aws_vpc_endpoint" "cloudwatch" {
+    vpc_id              = aws_vpc.private.id
+    service_name        = "com.amazonaws.eu-central-1.monitoring"
+    vpc_endpoint_type   = "Interface"
+
+    subnet_ids          = [aws_subnet.private["data-1"].id, aws_subnet.private["data-2"].id]
+    security_group_ids  = [aws_security_group.vpc_endpoints.id]
+
+    private_dns_enabled = true
+}
+

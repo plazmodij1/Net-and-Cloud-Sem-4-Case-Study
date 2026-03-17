@@ -107,26 +107,26 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_db_proxy" "main" {
-    name = "${var.dev}-proxy"
-    debug_logging = false
-    engine_family = "MYSQL"
-    idle_client_timeout = 1800
-    require_tls = false
-    role_arn = aws_iam_role.rds_proxy.arn
-    vpc_security_group_ids = [aws_security_group.proxy.id]
-    vpc_subnet_ids = [for s in aws_subnet.private : s.id]
+    name                    = "${var.dev}-proxy"
+    debug_logging           = false
+    engine_family           = "MYSQL"
+    idle_client_timeout     = 1800
+    require_tls             = false
+    role_arn                = aws_iam_role.rds_proxy.arn
+    vpc_security_group_ids  = [aws_security_group.proxy.id]
+    vpc_subnet_ids          = [for s in aws_subnet.private : s.id]
 
     auth {
         auth_scheme = "SECRETS"
-        iam_auth = "DISABLED"
-        secret_arn = aws_secretsmanager_secret.db_cred.arn
+        iam_auth    = "DISABLED"
+        secret_arn  = aws_secretsmanager_secret.db_cred.arn
     } 
 }
 
 resource "aws_db_proxy_target" "aurora" {
-    db_proxy_name = aws_db_proxy.main.name
-    target_group_name = "default"
-    db_cluster_identifier = aws_rds_cluster.main.id
+    db_proxy_name           = aws_db_proxy.main.name
+    target_group_name       = "default"
+    db_cluster_identifier   = aws_rds_cluster.main.id
 }
 
 resource "aws_instance" "vpn" {

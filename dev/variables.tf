@@ -14,6 +14,10 @@ variable "instance" {
   default = "db.t3.medium"
 }
 
+variable "db_port" {
+  default = "3306"
+}
+
 variable "private_subnet_cidrs" {
     type = map(object({
         cidr_block = string
