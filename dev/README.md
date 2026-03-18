@@ -19,13 +19,13 @@ The infrastructure is segmented into the following key components:
 - **AWS Lambda**: Serverless functions running in the private VPC. They are configured to securely communicate with the database layer via an RDS Proxy.
 - **AWS Fargate**: Containerized applications running in the private VPC. These containers are configured to accept incoming HTTP traffic on port 3000, originating specifically from the Public VPC.
 
-### `4`. Database & Data Layer
+### 4. Database & Data Layer
 - **Amazon RDS (Database)**: The main relational database resides in the private VPC. It is strictly isolated and does not accept direct application connections.
 - **RDS Proxy**: Acts as a secure intermediary between the Lambda functions and the RDS database (port 3306). This helps manage and pool database connections efficiently.
 
 ### 5. Load Balancing
 - **Application Load Balancer (ALB)**: Situated in the public VPC, it acts as the primary entry point for external users, accepting HTTP traffic on port 80 and routing it to the backend services.
-
+ 
 ### 6. AWS Service Endpoints (VPC Endpoints)
 To maintain a high security posture and avoid routing internal traffic over the public internet, backend services (Lambda, Fargate) communicate with native AWS APIs via strictly controlled VPC Endpoints.
 
