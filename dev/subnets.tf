@@ -5,7 +5,6 @@ resource "aws_subnet" "private" {
     cidr_block = each.value.cidr_block
     availability_zone = each.value.az
     
-  #subnet_id = aws_subnet.private[keys(aws_subnet.private)[0]].id
 }
 
 resource "aws_subnet" "public" {

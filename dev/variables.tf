@@ -1,3 +1,11 @@
+variable "dev" {
+  default = "dev"
+}
+
+variable "profile" {
+  default = "marko-student"  
+}
+
 variable  "region" {
     default = "eu-central-1"
 }
@@ -18,6 +26,13 @@ variable "db_port" {
   default = "3306"
 }
 
+variable "cidr_block_vpc_priv" {
+    default = "10.0.0.0/16"
+}
+variable "cidr_block_vpc_public" {
+    default = "10.1.0.0/16"
+}
+
 variable "private_subnet_cidrs" {
     type = map(object({
         cidr_block = string
@@ -35,13 +50,8 @@ variable "private_subnet_cidrs" {
         az = "eu-central-1b"
         tags = "data-2-subnet"
       }
-      "vpn" = {
-        cidr_block = "10.0.3.0/24"
-        az = "eu-central-1a"
-        tags = "vpn-subnet"
-      }
       "app" = {
-        cidr_block = "10.0.4.0/24"
+        cidr_block = "10.0.3.0/24"
         az = "eu-central-1a"
         tags = "app-subnet"
       }
@@ -64,6 +74,11 @@ variable "public_subnet_cidrs" {
         cidr_block = "10.1.2.0/24"
         az = "eu-central-1b"
         tags = "dmz-2-subnet"
+      }
+      "vpn" = {
+        cidr_block = "10.1.3.0/24"
+        az = "eu-central-1a"
+        tags = "vpn-subnet"
       }
     }
 }

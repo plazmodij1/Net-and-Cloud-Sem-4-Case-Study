@@ -132,7 +132,7 @@ resource "aws_db_proxy_target" "aurora" {
 resource "aws_instance" "vpn" {
     ami                             = "ami-01f79b1e4a5c64257"
     instance_type                   = "t3.micro"
-    subnet_id                       = aws_subnet.public["dmz-1"].id
+    subnet_id                       = aws_subnet.public["vpn"].id
     associate_public_ip_address     = true
     vpc_security_group_ids          = [aws_security_group.vpn.id]
     key_name                        = "dev-vpn-key"
