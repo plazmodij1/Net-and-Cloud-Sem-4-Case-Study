@@ -17,8 +17,8 @@ resource "aws_ecs_task_definition" "grafana" {
     task_role_arn               = aws_iam_role.ecs_task.arn
 
     container_definitions = jsonencode([{
-        name        = "grafana"
-        image       = "322691663773.dkr.ecr.eu-central-1.amazonaws.com/dev-grafana-repo:latest"
+        name        = var.grafana_image
+        image       = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}..amazonaws.com/dev-grafana-repo:latest"
         essential   = true
 
         portMappings = [{
@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "grafana" {
             logDriver = "awslogs"
             options = {
                 "awslogs-group"         = aws_cloudwatch_log_group.grafana.name
-                "awslogs-region"        = var.region
+                "awslogs-region"        = data.aws_region.current.id
                 "awslogs-stream-prefix" = "ecs"
             }
         }

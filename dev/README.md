@@ -12,8 +12,8 @@ The infrastructure is segmented into the following key components:
 
 ### 2. Secure Remote Access
 - **VPN**: A VPN server is deployed in the public VPC to provide secure administrative access to the environment. It is configured to allow:
-  - SSH traffic on port 22.
-  - WireGuard VPN traffic on UDP port 51820.
+- **SSH** SSH traffic on port 22.
+- **WireGuard** WireGuard VPN traffic on UDP port 51820.
 
 ### 3. Compute Services
 - **AWS Lambda**: Serverless functions running in the private VPC. They are configured to securely communicate with the database layer via an RDS Proxy.
@@ -30,13 +30,13 @@ The infrastructure is segmented into the following key components:
 To maintain a high security posture and avoid routing internal traffic over the public internet, backend services (Lambda, Fargate) communicate with native AWS APIs via strictly controlled VPC Endpoints.
 
 - **Interface Endpoints** (Restricted to port 443 from Lambda and Fargate SGs):
-  - **Secrets Manager**: For securely retrieving application secrets and database credentials.
-  - **ECR (API & Docker)**: For pulling container images securely to Fargate.
-  - **CloudWatch Monitoring**: For pushing custom metrics.
-  - **CloudWatch Logs**: For centralized application and system logging.
+- **Secrets Manager**: For securely retrieving application secrets and database credentials.
+- **ECR (API & Docker)**: For pulling container images securely to Fargate.
+- **CloudWatch Monitoring**: For pushing custom metrics.
+- **CloudWatch Logs**: For centralized application and system logging.
 
 - **Gateway Endpoint**:
-  - **S3**: Attached directly to the private route table, ensuring secure, high-bandwidth access to object storage.
+- **S3**: Attached directly to the private route table, ensuring secure, high-bandwidth access to object storage.
 
 ## Security Groups (Traffic Flow)
 
@@ -53,6 +53,18 @@ Network traffic is strictly controlled using the principle of least privilege th
 | **`vpc-endpoints-sg`** | Allows inbound HTTPS (port 443) traffic **strictly** from Lambda and Fargate Security Groups to communicate with AWS Services. |
 
 ## Getting Started
+
+Since the environment uses an ECR to get the Grafana image, before being able to deploy it, the ECR repository and the Grafana image 
+must be created manually. The Grafana image is created with the docker repository. The following steps are to properly create and upload the 
+Grafana image to the ECR repository:
+
+
+docker pull grafana/grafana:latest
+aws ecr get-login-password --region "REGION" | docker login --username AWS --password-stdin "AWS_PROFILE_NUMBER".dkr.ecr."REGION".amazonaws.com
+docker tag grafana/grafana:latest "AWS_PROFILE_NUMBER".dkr.ecr."REGION".amazonaws.com/"ECR_REPO_NAME":latest
+docker push "AWS_PROFILE_NUMBER".dkr.ecr."REGION".amazonaws.com/"ECR_REPO_NAME":latest
+
+Apart from the EC2 repository, for the VPN tunnel to work, EC2 key pair needs to be created. The name of the key must be **`dev-vpn-key`**, the key type should be **RSA** and the key file format must be **.pem**
 
 To deploy this infrastructure, initialize Terraform and apply the configuration:
 

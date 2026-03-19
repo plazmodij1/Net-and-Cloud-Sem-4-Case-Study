@@ -7,6 +7,7 @@ variable "profile" {
 }
 
 variable  "region" {
+    description = "Region variable for the provider resource"
     default = "eu-central-1"
 }
 
@@ -24,6 +25,17 @@ variable "instance" {
 
 variable "db_port" {
   default = "3306"
+}
+
+variable "grafana_image" {
+  description = "Name of the Grafana image that is uploaded to the ECR"
+  default = "grafana"
+}
+
+variable "ecr_repo_name" {
+  description = "Name of the ECR repository which contains the Grafana image"
+  default = "dev-grafana-repo"
+
 }
 
 variable "cidr_block_vpc_priv" {
