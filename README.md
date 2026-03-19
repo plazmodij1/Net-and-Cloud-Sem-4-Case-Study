@@ -58,11 +58,12 @@ Since the environment uses an ECR to get the Grafana image, before being able to
 must be created manually. The Grafana image is created with the docker repository. The following steps are to properly create and upload the 
 Grafana image to the ECR repository:
 
-
+```bash
 docker pull grafana/grafana:latest
 aws ecr get-login-password --region "REGION" | docker login --username AWS --password-stdin "AWS_PROFILE_NUMBER".dkr.ecr."REGION".amazonaws.com
 docker tag grafana/grafana:latest "AWS_PROFILE_NUMBER".dkr.ecr."REGION".amazonaws.com/"ECR_REPO_NAME":latest
 docker push "AWS_PROFILE_NUMBER".dkr.ecr."REGION".amazonaws.com/"ECR_REPO_NAME":latest
+```
 
 Apart from the EC2 repository, for the VPN tunnel to work, EC2 key pair needs to be created. The name of the key must be **`dev-vpn-key`**, the key type should be **`RSA`** and the key file format must be **`.pem`**
 
