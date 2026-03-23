@@ -1,7 +1,23 @@
-# Provider block
 provider "aws" {
     profile = var.profile
     region  = var.region
+}
+
+terraform {
+    backend "s3"{
+        bucket = "dev-s3-bucket-571238153"
+        key = "terraform.tfstate"
+        region = "eu-central-1"
+        encrypt = true
+        profile = "marko-student"
+    }
+
+    required_providers {
+        aws = {
+            source = "hashicorp/aws"
+            version = "~>6.0"
+        }
+    }
 }
 
 resource "aws_rds_cluster" "main" {
