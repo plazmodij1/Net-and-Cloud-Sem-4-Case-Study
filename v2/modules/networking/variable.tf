@@ -1,0 +1,84 @@
+variable "env" {
+    type = string
+}
+
+variable "region" {
+    type = string
+}
+
+variable "vpc_public" {
+    type = string  
+}
+
+variable "vpc_private" {
+    type = string
+}
+
+variable "endpoint_private_subnet" {
+    type = list(string)
+}
+
+variable "lambda_sg_id" {
+    type = string
+}
+
+variable "fargate_sg_id" {
+    type = string
+}
+
+variable "cidr_block_vpc_private" {
+    default = "10.0.0.0/16"
+}
+variable "cidr_block_vpc_public" {
+    default = "10.1.0.0/16"
+}
+
+variable "private_subnet_cidrs" {
+    type = map(object({
+        cidr_block = string
+        az = string
+        tags = string
+    }))
+    default = {
+    "data-1" = {
+        cidr_block = "10.0.1.0/24"
+        az = "eu-central-1a"
+        tags = "data-1-subnet"
+        }
+    "data-2" = {
+        cidr_block = "10.0.2.0/24"
+        az = "eu-central-1b"
+        tags = "data-2-subnet"
+        }
+    "app" = {
+        cidr_block = "10.0.3.0/24"
+        az = "eu-central-1a"
+        tags = "app-subnet"
+        }
+    }
+}
+
+variable "public_subnet_cidrs" {
+    type = map(object({
+        cidr_block = string
+        az = string
+        tags = string
+    }))
+    default = {
+      "dmz-1" = {
+        cidr_block = "10.1.1.0/24"
+        az = "eu-central-1a"
+        tags = "dmz-1-subnet"
+      }
+      "dmz-2" = {
+        cidr_block = "10.1.2.0/24"
+        az = "eu-central-1b"
+        tags = "dmz-2-subnet"
+      }
+      "vpn" = {
+        cidr_block = "10.1.3.0/24"
+        az = "eu-central-1a"
+        tags = "vpn-subnet"
+      }
+    }
+}
