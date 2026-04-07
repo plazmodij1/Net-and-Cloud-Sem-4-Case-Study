@@ -10,8 +10,8 @@ variable "vpc_private_id" {
   type = string
 }
 
-variable "lambda_sg_id" {
-    type = string
+variable "cidr_block_vpc_private" {
+  type = string
 }
 
 variable "db_username"{

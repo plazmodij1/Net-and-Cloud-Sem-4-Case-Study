@@ -7,7 +7,7 @@ resource "aws_security_group" "proxy" {
         from_port       = 3306
         to_port         = 3306
         protocol        = "tcp"
-        security_groups = [var.lambda_sg_id]
+        cidr_blocks     = [var.cidr_block_vpc_private]
     }
 
     egress {

@@ -1,23 +1,3 @@
-output "alb_arn" {
-    description = "The ARN of the ALB"
-    value = aws_lb.main.arn
-}
-
-output "alb_dns_name" {
-    description = "The DNS name of the ALB"
-    value = aws_lb.main.dns_name
-}
-
-output "alb_public_url" {
-    description = "The public URL of the ALB"
-    value = "http://${aws_lb.main.dns_name}"
-}
-
-output "alb_zone_id" {
-    description = "The zone ID of ALB"
-    value = aws_lb.main.zone_id
-}
-
 output "lambda_function_arn" {
     description = "The ARN of the Lambda function"
     value       = aws_lambda_function.main.arn
@@ -52,3 +32,11 @@ output "lambda_sg_id" {
     value = aws_security_group.lambda.id
 }
 
+output "website_url" {
+    description = "The public URL of your Application Load Balancer"
+    value       = "http://${aws_lb.main.dns_name}"
+}
+
+output "vpn_download_command" {
+    value = "scp -i your-aws-ssh-key-name.pem ubuntu@${aws_instance.vpn.public_ip}:~/mylaptop.conf ./"
+}
