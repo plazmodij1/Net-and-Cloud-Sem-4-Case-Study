@@ -26,11 +26,11 @@ jobs:
         strategy:
             max-parallel: 1
             matrix:
-                module: [monitoring, compute, storage, networking, certificates, security]
+                module: [monitoring, compute, storage, networking, security]
 
         defaults:
             run:
-                working-directory: ${{ github.workspace }}/env/dev/${{ matrix.module }}
+                working-directory: ${{ github.workspace }}/v2/env/dev/${{ matrix.module }}
 
         steps:
             - name: Checkout Repository
@@ -47,7 +47,7 @@ jobs:
             
             - name: Terraform Init
               run: |
-                STATE_KEY="env/dev/${{ matrix.module }}/terraform.tfstate"
+                STATE_KEY="v2/env/dev/${{ matrix.module }}/terraform.tfstate"
                 terraform init \
                   -backend-config="bucket=${{ env.STATE_BUCKET }}" \
                   -backend-config="key=$STATE_KEY" \
@@ -55,4 +55,4 @@ jobs:
                   -backend-config="use_lockfile=true"
 
             - name: Terraform Destroy
-              run: terraform destroy -auto-approve -var-file=${{ github.workspace }}/global/variables.tfvars
+              run: terraform destroy -auto-approve -var-file=${{ github.workspace }}/v2/global/variables.tfvars
