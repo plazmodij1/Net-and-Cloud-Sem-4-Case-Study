@@ -43,7 +43,7 @@ jobs:
 
             - name: Terraform Init
               run: |
-                STATE_KEY="env/dev/${{ matrix.module }}/terraform.tfstate"
+                STATE_KEY="v2/env/dev/${{ matrix.module }}/terraform.tfstate"
                 terraform init \
                   -backend-config="bucket=${{ env.STATE_BUCKET }}" \
                   -backend-config="key=$STATE_KEY" \
@@ -54,7 +54,7 @@ jobs:
               run: terraform validate
 
             - name: Terraform Plan
-              run: terraform plan -out=tfplan -var-file="variables.tfvars"
+              run: terraform plan -out=tfplan -var-file=${{ github.workspace }}/v2/global/variables.tfvars
 
             - name: Terraform Apply
               run: terraform apply -auto-approve tfplan
