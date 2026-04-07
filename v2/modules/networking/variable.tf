@@ -6,10 +6,6 @@ variable "region" {
     type = string
 }
 
-variable "lambda_sg_id" {
-    type = string
-}
-
 variable "cidr_block_vpc_private" {
     default = "10.0.0.0/16"
 }
