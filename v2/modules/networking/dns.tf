@@ -1,6 +1,6 @@
 resource "aws_service_discovery_private_dns_namespace" "main" {
     name    = "student.internal"
-    vpc     = aws_vpc_private.id
+    vpc     = aws_vpc.private.id
 }
 
 resource "aws_route53_zone_association" "public_vpn_share" {
