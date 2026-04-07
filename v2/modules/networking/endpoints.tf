@@ -39,7 +39,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
 
 resource "aws_vpc_endpoint" "grafana_logs" {
     vpc_id                  = aws_vpc.private.id
-    service_name            = "com.amazonaws.${region}.logs"
+    service_name            = "com.amazonaws.${var.region}.logs"
     vpc_endpoint_type       = "Interface"
     private_dns_enabled     = true
 
