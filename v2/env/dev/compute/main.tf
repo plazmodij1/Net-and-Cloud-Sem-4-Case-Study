@@ -65,7 +65,6 @@ module "compute" {
     proxy_endpoint = data.terraform_remote_state.storage.outputs.proxy_endpoint
 
     #Monitoring linkages
-    fargate_sg_id = data.terraform_remote_state.monitoring.outputs.fargate_sg_id
     lambda_zip = "../../../modules/compute/lambda.zip"
 
 }

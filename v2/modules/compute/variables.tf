@@ -48,7 +48,3 @@ variable "alb_public_subnets" {
 variable "vpn_public_subnet" {
     type = string
 }
-
-variable fargate_sg_id {
-    type = string
-}
