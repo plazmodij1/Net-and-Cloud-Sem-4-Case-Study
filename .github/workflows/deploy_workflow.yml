@@ -54,7 +54,6 @@ jobs:
               run: terraform validate
 
             - name: Terraform Plan
-              working-directory: ./v2/global
               run: terraform plan -out=tfplan -var-file="variables.tfvars"
 
             - name: Terraform Apply
