@@ -34,9 +34,10 @@ data "terraform_remote_state" "compute" {
 }
 
 module "networking" {
-    source = "../../modules/networking"
+    source = "../../../modules/networking"
 
-    env = var.dev
+    region = var.region
+    env = var.env
 
     lambda_sg_id = data.terraform_remote_state.compute.outputs.lambda_sg_id
 

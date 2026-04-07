@@ -36,13 +36,14 @@ data "terraform_remote_state" "networking" {
 }
 
 module "storage" {
-    source = "../../modules/storage"
+    source = "../../../modules/storage"
 
-    env = var.dev
+    region = var.region
+    env = var.env
 
     lambda_sg_id = data.terraform_remote_state.compute.outputs.lambda_sg_id
 
-    db_security_group = data.terraform_remote_state.networking.outputs.db_security_group
+    db_subnet_group = data.terraform_remote_state.networking.outputs.db_subnet_group
     proxy_subnets = data.terraform_remote_state.networking.outputs.proxy_subnets
 
 }

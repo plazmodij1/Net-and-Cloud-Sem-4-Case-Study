@@ -26,9 +26,10 @@ data "terraform_remote_state" "networking" {
 
 
 module "monitoring" {
-    source = "../../modules/monitoring"
-
-    env = var.dev
+    source = "../../../modules/monitoring"
+    
+    region = var.region
+    env = var.env
 
     cidr_block_vpc_public = data.terraform_remote_state.networking.outputs.cidr_blocks_vpc_public
     lambda_private_subnet = data.terraform_remote_state.networking.outputs.lambda_private_subnet

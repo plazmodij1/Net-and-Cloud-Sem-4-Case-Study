@@ -1,11 +1,11 @@
 resource "aws_lambda_function" "main"{
-    filename        = "./hello.zip"
+    filename        = data.archive_file.lambda_zip.output_path
     function_name   = "${var.env}-lambda"
     role            = aws_iam_role.lambda.arn
     handler         = "hello.handler"
     runtime         = "nodejs22.x"
 
-    source_code_hash    = filebase64sha256("./hello.zip")
+    source_code_hash    = data.archive_file.lambda_zip.output_base64sha256
     timeout             = 15
 
     vpc_config {
@@ -32,4 +32,10 @@ resource "aws_lambda_permission" "alb" {
     function_name = aws_lambda_function.main.function_name
     principal = "elasticloadbalancing.amazonaws.com"
     source_arn = aws_lb_target_group.main.arn
+}
+
+data "archive_file" "lambda_zip" {
+    type = "zip"
+    source_dir  = var.lambda_zip
+    output_path = "${path.module}/lambda.zip"
 }

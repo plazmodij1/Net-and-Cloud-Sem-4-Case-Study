@@ -35,14 +35,15 @@ data "terraform_remote_state" "storage" {
 }
 
 module "compute" {
-    source = "../../modules/compute"
+    source = "../../../modules/compute"
 
-    env = var.dev
+    region = var.region
+    env = var.env
     
     #Networking linkages
     vpc_public = data.terraform_remote_state.networking.outputs.vpc_public
     vpc_private = data.terraform_remote_state.networking.outputs.vpc_private
-    cidr_block_vpc_private = data.terraform_remote_state.networking.outputs.cidr_block_vpc_private
+    cidr_block_vpc_public = data.terraform_remote_state.networking.outputs.cidr_blocks_vpc_public
     lambda_private_subnet = data.terraform_remote_state.networking.outputs.lambda_private_subnet
     alb_public_subnets = data.terraform_remote_state.networking.outputs.alb_public_subnets
     vpn_public_subnet = data.terraform_remote_state.networking.outputs.vpn_public_subnet
@@ -51,6 +52,5 @@ module "compute" {
     db_name = data.terraform_remote_state.storage.outputs.db_name
     proxy_endpoint = data.terraform_remote_state.storage.outputs.proxy_endpoint
 
-    grafana_image = data.terraform_remote_state.monitoring.outputs.grafana_image
-    vpn_script = vpn-setup.sh
+    lambda_zip = "../../../modules/compute/lambda.zip"
 }

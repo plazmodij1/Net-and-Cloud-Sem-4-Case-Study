@@ -2,6 +2,9 @@ variable "env" {
     type = string
 }
 
+variable "region" {
+    type = string
+}
 #Compute variables
 
 variable "lambda_zip" {
@@ -10,10 +13,6 @@ variable "lambda_zip" {
 
 variable "vpn_instance" {
     default = "t3.micro"
-}
-
-variable "vpn_script" {
-    type = string
 }
 
 #Storage variables
