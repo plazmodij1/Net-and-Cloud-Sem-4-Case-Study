@@ -45,20 +45,20 @@ variable "public_subnet_cidrs" {
         tags = string
     }))
     default = {
-      "dmz-1" = {
+    "dmz-1" = {
         cidr_block = "10.1.1.0/24"
         az = "eu-central-1a"
         tags = "dmz-1-subnet"
-      }
-      "dmz-2" = {
+    }
+    "dmz-2" = {
         cidr_block = "10.1.2.0/24"
         az = "eu-central-1b"
         tags = "dmz-2-subnet"
-      }
-      "vpn" = {
+    }
+    "vpn" = {
         cidr_block = "10.1.3.0/24"
         az = "eu-central-1a"
         tags = "vpn-subnet"
-      }
+    }
     }
 }
