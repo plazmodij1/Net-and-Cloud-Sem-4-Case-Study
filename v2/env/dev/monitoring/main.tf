@@ -18,7 +18,7 @@ data "terraform_remote_state" "networking" {
     backend = "s3"
     config = {
         bucket = "dev-s3-bucket-571238153"
-        key = "env/dev/monitoring/terraform.tfstate"
+        key = "v2/env/dev/networking/terraform.tfstate"
         region = var.region
         encrypt = true
     }
