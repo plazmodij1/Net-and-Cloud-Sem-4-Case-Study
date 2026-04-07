@@ -23,8 +23,20 @@ data "terraform_remote_state" "networking" {
         encrypt = true
     }
 }
+
 #Read storage module outputs from S3 state
 data "terraform_remote_state" "storage" {
+    backend = "s3"
+    config = {
+        bucket = "dev-s3-bucket-571238153"
+        key = "env/dev/storage/terraform.tfstate"
+        region = var.region
+        encrypt = true
+    }
+}
+
+#Read monitoring module outputs from S3 state
+data "terraform_remote_state" "monitoring" {
     backend = "s3"
     config = {
         bucket = "dev-s3-bucket-571238153"
@@ -52,5 +64,8 @@ module "compute" {
     db_name = data.terraform_remote_state.storage.outputs.db_name
     proxy_endpoint = data.terraform_remote_state.storage.outputs.proxy_endpoint
 
+    #Monitoring linkages
+    fargate_sg_id = data.terraform_remote_state.monitoring.outputs.fargate_sg_id
     lambda_zip = "../../../modules/compute/lambda.zip"
+
 }
