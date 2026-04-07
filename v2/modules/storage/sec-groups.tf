@@ -1,7 +1,7 @@
 # Security group for the RDS Proxy allowing inbound MySQL traffic from the Lambda function
 resource "aws_security_group" "proxy" {
     name    = "${var.env}-proxy-sg"
-    vpc_id  = var.vpc.private
+    vpc_id  = var.vpc_private_id
 
     ingress {
         from_port       = 3306
@@ -30,7 +30,7 @@ resource "aws_security_group_rule" "allow_proxy_to_rds" {
 # Security group for the RDS Aurora database cluster allowing outbound traffic
 resource "aws_security_group" "db" {
     name    = "${var.env}-db-sg"
-    vpc_id  = var.vpc.private
+    vpc_id  = var.vpc_private_id
 
     egress {
         from_port       = 0

@@ -41,8 +41,9 @@ module "storage" {
     region = var.region
     env = var.env
 
-    lambda_sg_id = data.terraform_remote_state.compute.outputs.lambda_sg_id
+    vpc_private_id = data.terraform_remote_state.networking.outputs.vpc_private
 
+    lambda_sg_id = data.terraform_remote_state.compute.outputs.lambda_sg_id
     db_subnet_group = data.terraform_remote_state.networking.outputs.db_subnet_group
     proxy_subnets = data.terraform_remote_state.networking.outputs.proxy_subnets
 
