@@ -31,7 +31,7 @@ output "grafana_private_subnet" {
 }
 
 output "db_subnet_group" {
-    value = aws_db_subnet_group
+    value = aws_db_subnet_group.main.name
 }
 
 output "proxy_subnets" {

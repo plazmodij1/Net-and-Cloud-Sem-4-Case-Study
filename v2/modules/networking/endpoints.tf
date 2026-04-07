@@ -1,7 +1,7 @@
 
 resource "aws_vpc_endpoint" "secrets_manager" {
     vpc_id              = aws_vpc.private.id
-    service_name        = "com.amazonaws.${region}.secretsmanager"
+    service_name        = "com.amazonaws.${var.region}.secretsmanager"
     vpc_endpoint_type   = "Interface"
 
     subnet_ids          = [aws_subnet.private["data-1"].id, aws_subnet.private["data-2"].id]
@@ -11,7 +11,7 @@ resource "aws_vpc_endpoint" "secrets_manager" {
 
 resource "aws_vpc_endpoint" "s3" {
     vpc_id              = aws_vpc.private.id
-    service_name        = "com.amazonaws.${region}.s3"
+    service_name        = "com.amazonaws.${var.region}.s3"
     vpc_endpoint_type   = "Gateway"
     
     route_table_ids          = [aws_route_table.private.id]    
@@ -19,7 +19,7 @@ resource "aws_vpc_endpoint" "s3" {
 
 resource "aws_vpc_endpoint" "ecr_api" {
     vpc_id              = aws_vpc.private.id
-    service_name        = "com.amazonaws.${region}.ecr.api"
+    service_name        = "com.amazonaws.${var.region}.ecr.api"
     vpc_endpoint_type   = "Interface"
     private_dns_enabled = true
 
