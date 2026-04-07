@@ -32,7 +32,7 @@ module "storage" {
 
     vpc_private_id = data.terraform_remote_state.networking.outputs.vpc_private
 
-    cidr_block_vpc_private = data.terraform_remote_state.networking.outputs.cidr_block_vpc
+    cidr_block_vpc_private = data.terraform_remote_state.networking.outputs.cidr_block_vpc_private
     db_subnet_group = data.terraform_remote_state.networking.outputs.db_subnet_group
     proxy_subnets = data.terraform_remote_state.networking.outputs.proxy_subnets
 
