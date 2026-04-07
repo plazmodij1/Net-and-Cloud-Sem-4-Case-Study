@@ -10,7 +10,7 @@ resource "aws_rds_cluster" "main" {
     deletion_protection     = false
     skip_final_snapshot     = true
     
-    db_subnet_group_name    = var.subnet_group_name
+    db_subnet_group_name    = db_subnet_group
     vpc_security_group_ids  = [aws_security_group.db.id]
     storage_encrypted       = true
     
@@ -49,7 +49,7 @@ resource "aws_db_proxy" "main" {
     require_tls             = false
     role_arn                = aws_iam_role.rds_proxy.arn
     vpc_security_group_ids  = [aws_security_group.proxy.id]
-    vpc_subnet_ids          = var.private_subnet_ids
+    vpc_subnet_ids          = proxy_subnets
 
     auth {
         auth_scheme = "SECRETS"

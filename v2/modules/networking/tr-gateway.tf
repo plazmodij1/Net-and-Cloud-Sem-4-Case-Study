@@ -1,5 +1,5 @@
 resource "aws_internet_gateway" "igw" {
-    vpc_id = var.vpc_public
+    vpc_id = aws_vpc.public.id
     
     tags = {
         Name = "${var.env}-igw"
@@ -19,7 +19,7 @@ resource "aws_ec2_transit_gateway" "main" {
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "public" {
     transit_gateway_id  = aws_ec2_transit_gateway.main.id
-    vpc_id              = var.vpc_public
+    vpc_id              = aws_vpc.public.id
     subnet_ids          = [aws_subnet.public["dmz-1"].id, aws_subnet.public["dmz-2"].id]
 
     tags = {

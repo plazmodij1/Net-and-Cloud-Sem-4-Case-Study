@@ -6,18 +6,6 @@ variable "region" {
     type = string
 }
 
-variable "vpc_public" {
-    type = string  
-}
-
-variable "vpc_private" {
-    type = string
-}
-
-variable "endpoint_private_subnet" {
-    type = list(string)
-}
-
 variable "lambda_sg_id" {
     type = string
 }

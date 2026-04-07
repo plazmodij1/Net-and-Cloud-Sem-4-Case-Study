@@ -1,0 +1,60 @@
+name: Deploy Workflow
+
+on:
+    push:
+        branches:
+            - main
+
+permissions:
+    id-token: write
+    contents: read
+    security-events: write
+
+env:
+    AWS_REGION: ${{ vars.AWS_REGION }}
+    STATE_BUCKET: ${{ vars.STATE_BUCKET }}
+    ENV_NAME: ${{ vars.ENV_NAME }}
+
+jobs:
+    terraform:
+        name: Terraform Apply
+        runs-on: ubuntu-latest
+        strategy:
+            max-parallel: 1
+            matrix:
+                module: [security, certificates, networking, storage, compute, monitoring]
+
+        defaults:
+            run:
+                working-directory: ${{ github.workspace }}/env/dev/${{ matrix.module }}
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                aws-region: ${{ env.AWS_REGION }}
+
+            - name: Terraform setup
+              uses: hashicorp/setup-terraform@v3
+
+            - name: Terraform Init
+              run: |
+                STATE_KEY="env/dev/${{ matrix.module }}/terraform.tfstate"
+                terraform init \
+                  -backend-config="bucket=${{ env.STATE_BUCKET }}" \
+                  -backend-config="key=$STATE_KEY" \
+                  -backend-config="region=${{ env.AWS_REGION }}" \
+                  -backend-config="use_lockfile=true"
+                
+            - name: Terraform Validate
+              run: terraform validate
+
+            - name: Terraform Plan
+              run: terraform plan -out=tfplan -var-file=${{ github.workspace }}/global/variables.tfvars
+
+            - name: Terraform Apply
+              run: terraform apply -auto-approve tfplan

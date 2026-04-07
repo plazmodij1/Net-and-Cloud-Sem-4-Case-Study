@@ -1,11 +1,11 @@
 resource "aws_service_discovery_private_dns_namespace" "main" {
     name    = "student.internal"
-    vpc     = var.vpc_private
+    vpc     = aws_vpc_private.id
 }
 
 resource "aws_route53_zone_association" "public_vpn_share" {
     zone_id = aws_service_discovery_private_dns_namespace.main.hosted_zone
-    vpc_id  = var.vpc_public
+    vpc_id  = aws_vpc.public.id
 }
 
 resource "aws_service_discovery_service" "grafana" {

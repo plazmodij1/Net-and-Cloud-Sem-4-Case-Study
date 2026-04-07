@@ -7,7 +7,7 @@ variable "region" {
 }
 
 variable "grafana_image" {
-    type = string
+    default = "grafana"
 }
 
 variable "cidr_block_vpc_public" {
@@ -19,8 +19,7 @@ variable "lambda_private_subnet" {
 }
 
 variable "ecr_repo_name" {
-    description = "Name of the ECR repository which contains the Grafana image"
-    type = string
+    default = "dev-grafana-repo"
 }
 
 variable "grafana_private_subnet" {

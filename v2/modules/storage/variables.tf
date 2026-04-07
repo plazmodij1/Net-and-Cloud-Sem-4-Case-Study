@@ -22,10 +22,10 @@ variable "db_port" {
   default = "3306"
 }
 
-variable "subnet_group_name" {
+variable "db_subnet_group" {
   type = string
 }
 
-variable "private_subnet_ids" {
+variable "proxy_subnets" {
   type = list(string)
 }

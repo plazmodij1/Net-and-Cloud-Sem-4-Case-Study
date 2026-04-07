@@ -10,6 +10,10 @@ output "cidr_block_vpc_private" {
     value = var.cidr_block_vpc_private
 }
 
+output "cidr_block_vpc_public" {
+    value = var.cidr_block_vpc_public
+}
+
 output "alb_public_subnets" {
     value = [aws_subnet.public["dmz-1"].id, aws_subnet.public["dmz-2"].id]
 }
@@ -20,4 +24,16 @@ output "lambda_private_subnet" {
 
 output "vpn_public_subnet" {
     value = aws_subnet.public["vpn"].id
+}
+
+output "grafana_private_subnet" {
+    value = [aws_subnet.private["data-1"].id, aws_subnet.private["data-2"].id]
+}
+
+output "db_subnet_group" {
+    value = aws_db_subnet_group
+}
+
+output "proxy_subnets" {
+    value = [for s in aws_subnet.private : s.id]
 }

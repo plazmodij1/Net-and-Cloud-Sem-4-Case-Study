@@ -12,6 +12,7 @@ terraform {
         }
     }
 }
+
 #Read networking module outputs from S3 state
 data "terraform_remote_state" "networking" {
     backend = "s3"
@@ -50,7 +51,6 @@ module "compute" {
     db_name = data.terraform_remote_state.storage.outputs.db_name
     proxy_endpoint = data.terraform_remote_state.storage.outputs.proxy_endpoint
 
-    grafana_image = 
-    vpn_instance = 
+    grafana_image = data.terraform_remote_state.monitoring.outputs.grafana_image
     vpn_script = vpn-setup.sh
 }

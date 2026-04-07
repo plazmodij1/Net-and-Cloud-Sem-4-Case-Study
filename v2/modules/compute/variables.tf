@@ -9,7 +9,7 @@ variable "lambda_zip" {
 }
 
 variable "vpn_instance" {
-    type = string
+    default = "t3.micro"
 }
 
 variable "vpn_script" {
