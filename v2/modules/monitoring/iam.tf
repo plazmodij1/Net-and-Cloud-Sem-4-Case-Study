@@ -1,4 +1,4 @@
-resource "aws_iam_role" "ecs_execution" {
+resource "aws_iam_role" "ecs_execution_grafana" {
     name = "${var.env}-ecs-execution-role"
     assume_role_policy = jsonencode({
         "Version": "2012-10-17",
@@ -10,7 +10,7 @@ resource "aws_iam_role" "ecs_execution" {
     })
 }
 
-resource "aws_iam_role" "ecs_task" {
+resource "aws_iam_role" "ecs_task_grafana" {
     name = "${var.env}-ecs-task-role"
     assume_role_policy = jsonencode({
         "Version" = "2012-10-17"
@@ -23,11 +23,11 @@ resource "aws_iam_role" "ecs_task" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_execution" {
-    role        = aws_iam_role.ecs_execution.name
+    role        = aws_iam_role.ecs_execution_grafana.name
     policy_arn  = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task" {
-    role        = aws_iam_role.ecs_task.name
+    role        = aws_iam_role.ecs_task_grafana.name
     policy_arn  = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
 }
