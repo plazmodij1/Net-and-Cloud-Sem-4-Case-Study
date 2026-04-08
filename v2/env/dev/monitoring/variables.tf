@@ -5,3 +5,7 @@ variable "region" {
 variable "env" {
     type = string
 }
+
+variable "email" {
+    type = string
+}

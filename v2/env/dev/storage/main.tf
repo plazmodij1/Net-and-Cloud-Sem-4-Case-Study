@@ -29,6 +29,7 @@ module "storage" {
 
     region = var.region
     env = var.env
+    email = var.email
 
     vpc_private_id = data.terraform_remote_state.networking.outputs.vpc_private
 

@@ -30,7 +30,8 @@ module "monitoring" {
     
     region = var.region
     env = var.env
-
+    email = var.email
+    
     cidr_block_vpc_public = data.terraform_remote_state.networking.outputs.cidr_block_vpc_public
     lambda_private_subnet = data.terraform_remote_state.networking.outputs.lambda_private_subnet
     grafana_private_subnet = data.terraform_remote_state.networking.outputs.grafana_private_subnet

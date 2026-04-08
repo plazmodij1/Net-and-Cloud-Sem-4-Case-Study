@@ -24,7 +24,7 @@ data "terraform_remote_state" "storage" {
     }
 }
 
-#Read monitoring module outputs from S3 state
+#Read networking module outputs from S3 state
 data "terraform_remote_state" "networking" {
     backend = "s3"
     config = {
@@ -40,7 +40,8 @@ module "compute" {
 
     region = var.region
     env = var.env
-    
+    email = var.email
+
     #Networking linkages
     vpc_public = data.terraform_remote_state.networking.outputs.vpc_public
     vpc_private = data.terraform_remote_state.networking.outputs.vpc_private

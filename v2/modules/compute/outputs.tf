@@ -30,3 +30,7 @@ output "website_url" {
 output "vpn_download_command" {
     value = "scp -i your-aws-ssh-key-name.pem ubuntu@${aws_instance.vpn.public_ip}:~/mylaptop.conf ./"
 }
+
+output "alb_arn" {
+    value = aws_lb.main.arn
+}

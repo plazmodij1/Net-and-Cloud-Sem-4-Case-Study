@@ -18,4 +18,5 @@ module "networking" {
 
     region = var.region
     env = var.env
+    email = var.email
 }

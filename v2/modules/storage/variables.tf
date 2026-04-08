@@ -6,6 +6,10 @@ variable "region" {
     type = string
 }   
 
+variable "email" {
+    type = string
+}
+
 variable "vpc_private_id" {
   type = string
 }

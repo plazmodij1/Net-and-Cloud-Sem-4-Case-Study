@@ -5,6 +5,10 @@ variable "env" {
 variable "region" {
     type = string
 }
+
+variable "email" {
+    type = string
+}
 #Compute variables
 
 variable "lambda_zip" {

@@ -6,6 +6,10 @@ variable "region" {
     type = string
 }
 
+variable "email" {
+    type = string
+}
+
 variable "grafana_image" {
     default = "grafana"
 }
