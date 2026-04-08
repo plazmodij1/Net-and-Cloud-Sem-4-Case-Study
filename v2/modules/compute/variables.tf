@@ -48,3 +48,7 @@ variable "alb_public_subnets" {
 variable "vpn_public_subnet" {
     type = string
 }
+
+variable "db_secret_arn" {
+    type = string
+}

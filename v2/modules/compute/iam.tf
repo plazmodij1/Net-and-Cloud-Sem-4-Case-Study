@@ -20,7 +20,7 @@ resource "aws_iam_role_policy" "lambda_secrets" {
         Statement = [{
             Effect   = "Allow",
             Action   = ["secretsmanager:GetSecretValue"],
-            Resource = aws_secretsmanager_secret.db_cred.arn
+            Resource = var.db_secret_arn
         }]
     })
 }

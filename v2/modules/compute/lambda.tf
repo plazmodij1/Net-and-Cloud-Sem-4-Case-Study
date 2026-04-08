@@ -17,7 +17,7 @@ resource "aws_lambda_function" "main"{
         variables = {
             DB_HOST = var.proxy_endpoint
             DB_NAME = var.db_name
-            SECRET_ARN = aws_secretsmanager_secret.db_cred.arn
+            SECRET_ARN = var.db_secret_arn
         }
     }
     tags = {

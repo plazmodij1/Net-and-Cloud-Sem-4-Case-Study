@@ -18,16 +18,6 @@ output "lambda_function_invoke_arn" {
     value       = aws_lambda_function.main.invoke_arn
 }
 
-output "lambda_target_group_arn" {
-    description = "The ARN of the Lambda target group"
-    value       = aws_lb_target_group.lambda_tg.arn
-}
-
-output "lambda_target_group_name" {
-    description = "The name of the Lambda target group"
-    value       = aws_lb_target_group.lambda_tg.name
-}
-
 output "lambda_sg_id" {
     value = aws_security_group.lambda.id
 }
