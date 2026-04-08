@@ -63,6 +63,8 @@ module "compute" {
     #Storage linkages
     db_name = data.terraform_remote_state.storage.outputs.db_name
     proxy_endpoint = data.terraform_remote_state.storage.outputs.proxy_endpoint
+    db_secret_arn = data.terraform_remote_state.storage.outputs.db_secret_arn
+
 
     #Monitoring linkages
     lambda_zip = "../../../modules/compute/lambda.zip"

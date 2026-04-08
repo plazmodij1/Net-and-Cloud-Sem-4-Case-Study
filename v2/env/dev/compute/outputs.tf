@@ -1,9 +1,9 @@
 output "website_url" {
-    description = "Application Load Balancer ARN"
+    description = "URL of the ALB"
     value       = module.compute.website_url
 }
 
 output "vpn_download_command" {
-    description = "Application Load Balancer ARN"
+    description = "Download command for the VPN connection"
     value       = module.compute.vpn_download_command
 }

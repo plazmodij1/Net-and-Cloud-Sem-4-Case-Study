@@ -1,49 +1,49 @@
 output "vpc_public" {
-    description = "Application Load Balancer ARN"
+    description = "Public VPC ID"
     value       = module.networking.vpc_public
 }
 
 output "vpc_private" {
-    description = "Application Load Balancer ARN"
+    description = "Private VPC ID"
     value       = module.networking.vpc_private
 }
 
 output "cidr_block_vpc_private" {
-    description = "Application Load Balancer ARN"
+    description = "CIDR block for the private VPC"
     value       = module.networking.cidr_block_vpc_private
 }
 
 output "cidr_block_vpc_public" {
-    description = "Application Load Balancer ARN"
+    description = "CIDR block for the public VPC"
     value       = module.networking.cidr_block_vpc_public
 }
 
 output "alb_public_subnets" {
-    description = "Application Load Balancer ARN"
+    description = "Public subnets for ALB"
     value       = module.networking.alb_public_subnets
 }
 
 output "lambda_private_subnet" {
-    description = "Application Load Balancer ARN"
+    description = "Public subnets for Lambda"
     value       = module.networking.lambda_private_subnet
 }
 
 output "vpn_public_subnet" {
-    description = "Application Load Balancer ARN"
+    description = "Public subnets for VPN"
     value       = module.networking.vpn_public_subnet
 }
 
 output "grafana_private_subnet" {
-    description = "Application Load Balancer ARN"
+    description = "Private subnet for Grafana"
     value       = module.networking.grafana_private_subnet
 }
 
 output "db_subnet_group" {
-    description = "Application Load Balancer ARN"
+    description = "Subnet group for the database"
     value       = module.networking.db_subnet_group
 }
 
 output "proxy_subnets" {
-    description = "Application Load Balancer ARN"
+    description = "Subnets for the RDS proxy"
     value       = module.networking.proxy_subnets
 }
