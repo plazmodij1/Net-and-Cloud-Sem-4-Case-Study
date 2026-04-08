@@ -9,5 +9,5 @@ resource "aws_instance" "vpn" {
     tags = {
         Name = "${var.env}-vpn-instance"
     }
-    user_data = file("vpn-setup.sh")
+    user_data = file("${path.module}/vpn-setup.sh")
 }
