@@ -8,7 +8,7 @@ output "vpn_download_command" {
     value       = module.compute.vpn_download_command
 }
 
-output "vpn_download_command" {
+output "alb_arn" {
     description = "Download command for the VPN connection"
     value       = module.compute.alb_arn
 }
