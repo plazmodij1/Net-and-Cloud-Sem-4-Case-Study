@@ -1,5 +1,4 @@
-# IAM role used by the ECS agent to pull container images and publish logs
-resource "aws_iam_role" "ecs_execution_grafana" {
+resource "aws_iam_role" "ecs_execution" {
     name = "${var.env}-ecs-execution-role"
     assume_role_policy = jsonencode({
         "Version": "2012-10-17",
@@ -11,8 +10,7 @@ resource "aws_iam_role" "ecs_execution_grafana" {
     })
 }
 
-# IAM role assumed by the running ECS Fargate task to access other AWS services
-resource "aws_iam_role" "ecs_task_grafana" {
+resource "aws_iam_role" "ecs_task" {
     name = "${var.env}-ecs-task-role"
     assume_role_policy = jsonencode({
         "Version" = "2012-10-17"
