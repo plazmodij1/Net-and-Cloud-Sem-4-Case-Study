@@ -51,6 +51,6 @@ resource "aws_ecs_service" "grafana" {
     }
 
     service_registries {
-        registry_arn = grafana_discovery_service_arn
+        registry_arn = var.grafana_discovery_service_arn
     }
 }
