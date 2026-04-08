@@ -13,17 +13,6 @@ terraform {
     }
 }
 
-#Read networking module outputs from S3 state
-data "terraform_remote_state" "networking" {
-    backend = "s3"
-    config = {
-        bucket = "dev-s3-bucket-571238153"
-        key = "v2/env/dev/networking/terraform.tfstate"
-        region = var.region
-        encrypt = true
-    }
-}
-
 #Read storage module outputs from S3 state
 data "terraform_remote_state" "storage" {
     backend = "s3"
@@ -55,7 +44,7 @@ module "compute" {
     #Networking linkages
     vpc_public = data.terraform_remote_state.networking.outputs.vpc_public
     vpc_private = data.terraform_remote_state.networking.outputs.vpc_private
-    cidr_block_vpc_public = data.terraform_remote_state.networking.outputs.cidr_blocks_vpc_public
+    cidr_block_vpc_public = data.terraform_remote_state.networking.outputs.cidr_block_vpc_public
     lambda_private_subnet = data.terraform_remote_state.networking.outputs.lambda_private_subnet
     alb_public_subnets = data.terraform_remote_state.networking.outputs.alb_public_subnets
     vpn_public_subnet = data.terraform_remote_state.networking.outputs.vpn_public_subnet
@@ -66,7 +55,6 @@ module "compute" {
     db_secret_arn = data.terraform_remote_state.storage.outputs.db_secret_arn
 
 
-    #Monitoring linkages
-    lambda_zip = "../../../modules/compute/lambda.zip"
+    lambda_zip = "../../../modules/compute/lambda"
 
 }
