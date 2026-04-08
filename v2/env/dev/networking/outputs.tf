@@ -47,3 +47,8 @@ output "proxy_subnets" {
     description = "Subnets for the RDS proxy"
     value       = module.networking.proxy_subnets
 }
+
+output "grafana_discovery_service_arn" {
+    description = "ARN of the Grafana discovery service"
+    value       = module.networking.grafana_discovery_service_arn
+}

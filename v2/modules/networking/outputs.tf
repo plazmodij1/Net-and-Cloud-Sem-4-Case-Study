@@ -37,3 +37,7 @@ output "db_subnet_group" {
 output "proxy_subnets" {
     value = [for s in aws_subnet.private : s.id]
 }
+
+output "grafana_discovery_service_arn" {
+    value = aws_service_discovery_service.grafana.arn
+}

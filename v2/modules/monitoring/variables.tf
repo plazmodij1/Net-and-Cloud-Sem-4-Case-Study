@@ -29,3 +29,7 @@ variable "grafana_private_subnet" {
 variable "vpc_private" {
     type = string
 }
+
+variable "grafana_discovery_service_arn" {
+    type = string
+}

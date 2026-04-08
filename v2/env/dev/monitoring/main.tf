@@ -35,4 +35,5 @@ module "monitoring" {
     lambda_private_subnet = data.terraform_remote_state.networking.outputs.lambda_private_subnet
     grafana_private_subnet = data.terraform_remote_state.networking.outputs.grafana_private_subnet
     vpc_private = data.terraform_remote_state.networking.outputs.vpc_private
+    grafana_discovery_service_arn = data.terraform_remote_state.networking.outputs.grafana_discovery_service_arn
 }
