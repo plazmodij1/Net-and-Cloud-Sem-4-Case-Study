@@ -2,4 +2,4 @@ region = "eu-central-1"
 
 env = "dev"
 
-email = "558991@student.fotnys.nl"
+email = "marko.sestanovic1@gmail.com"
