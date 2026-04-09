@@ -1,7 +1,7 @@
 data "archive_file" "email_lambda_zip" {
     type = "zip"
-    source_file  = "${path.module}/lambda-script.py"
-    output_path = "${path.module}/email_lambda.zip"
+    source_file  = "${path.module}/soar.py"
+    output_path = "${path.module}/soar.zip"
 }
 
 resource "aws_lambda_function" "soar_brain" {
