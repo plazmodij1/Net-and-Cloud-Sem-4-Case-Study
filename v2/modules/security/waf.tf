@@ -27,7 +27,7 @@ resource "aws_wafv2_web_acl" "alb_waf" {
             sampled_requests_enabled = true
         }
     }
-    
+
     visibility_config {
         cloudwatch_metrics_enabled = true
         metric_name = "WAFGlobalMetrics"
@@ -48,4 +48,12 @@ resource "aws_wafv2_web_acl_association" "alb" {
 resource "aws_wafv2_web_acl_logging_configuration" "waf_logs" {
     log_destination_configs = [aws_cloudwatch_log_group.waf_log_group.arn]
     resource_arn = aws_wafv2_web_acl.alb_waf.arn
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "waf_log_filter" {
+    name = "${var.env}-waf-block-filter"
+    log_group_name = aws_cloudwatch_log_group.waf_log_group.name
+    filter_pattern = "{ $.action = \"BLOCK\" }"
+    destination_arn = aws_lambda_function.soar_brain.arn
+    depends_on = [aws_lambda_permission.allow_cloudwatch]
 }
