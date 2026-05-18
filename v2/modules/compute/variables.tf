@@ -60,3 +60,7 @@ variable "vpn_public_subnet" {
 variable "eks_private_subnet"{
   type = string
 }
+
+variable "eks_cluster_name" {
+  type = string
+}

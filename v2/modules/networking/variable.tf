@@ -11,7 +11,7 @@ variable "email" {
 }
 
 variable "eks_cluster_name" {
-    default = "${var.env}-cluster"
+    type = string
 } 
 
 variable "cidr_block_vpc_private" {

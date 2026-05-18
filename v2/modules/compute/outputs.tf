@@ -39,3 +39,8 @@ output "portal_target_group_arn" {
   description = "ARN of the Target Group for the EKS Portal"
   value = aws_lb_target_group.main.arn
 }
+
+output "eks_cluster_name" {
+  description = "Name of the EKS cluster"
+  value = aws_eks_cluster.main.name
+}

@@ -58,5 +58,5 @@ module "compute" {
 
 
     lambda_zip = "../../../modules/compute/lambda"
-
+    eks_cluster_name = "${var.env}-cluster"
 }
