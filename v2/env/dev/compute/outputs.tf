@@ -13,7 +13,3 @@ output "alb_arn" {
     value       = module.compute.alb_arn
 }
 
-output "eks_cluster_name" {
-    description = "Name of the EKS cluster"
-    value = module.compute.eks_cluster_name
-}
