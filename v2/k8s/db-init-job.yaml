@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: db-init-sa
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::027053845110:role/dev-portal-pod-role
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-employee-table
+  namespace: default
+spec:
+  backoffLimit: 2 # Retries twice if the connection fails
+  template:
+    metadata:
+      labels:
+        app: db-init
+    spec:
+      serviceAccountName: db-init-sa
+      restartPolicy: Never
+      containers:
+      - name: db-initializer
+        image: alpine:3.18
+        env:
+        # Pass the secret ARN and Proxy endpoint dynamically (e.g., via Kustomize or Helm later, but hardcoded for MVP)
+        - name: SECRET_ID
+          value: "arn:aws:secretsmanager:eu-central-1:027053845110:secret:dev-db-credentials" 
+        - name: DB_PROXY_ENDPOINT
+          value: "dev-proxy.proxy-cduom6060vpm.eu-central-1.rds.amazonaws.com"
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo "Installing dependencies..."
+            apk add --no-cache aws-cli mysql-client jq
+
+            echo "Fetching database credentials securely via IRSA..."
+            # The pod uses its ServiceAccount to authenticate with AWS and read the secret
+            SECRET_JSON=$(aws secretsmanager get-secret-value --secret-id $SECRET_ID --query SecretString --output text)
+            
+            # Parse the JSON secret (assuming standard RDS secret format)
+            DB_USER=$(echo $SECRET_JSON | jq -r '.username')
+            DB_PASS=$(echo $SECRET_JSON | jq -r '.password')
+            
+            echo "Connecting to RDS Proxy and creating Employee table..."
+            mysql -h $DB_PROXY_ENDPOINT -u $DB_USER -p"$DB_PASS" -e "
+              CREATE TABLE IF NOT EXISTS Employee (
+                ID INT AUTO_INCREMENT PRIMARY KEY,
+                Name VARCHAR(255) NOT NULL,
+                Email VARCHAR(255) UNIQUE NOT NULL,
+                Department VARCHAR(100),
+                Status VARCHAR(50),
+                Role VARCHAR(100)
+              );
+            "
+            echo "Schema initialization successful."

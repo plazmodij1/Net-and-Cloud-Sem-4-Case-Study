@@ -49,6 +49,7 @@ module "compute" {
     lambda_private_subnet = data.terraform_remote_state.networking.outputs.lambda_private_subnet
     alb_public_subnets = data.terraform_remote_state.networking.outputs.alb_public_subnets
     vpn_public_subnet = data.terraform_remote_state.networking.outputs.vpn_public_subnet
+    eks_private_subnet = data.terraform_remote_state.networking.outputs.eks_private_subnet
 
     #Storage linkages
     db_name = data.terraform_remote_state.storage.outputs.db_name

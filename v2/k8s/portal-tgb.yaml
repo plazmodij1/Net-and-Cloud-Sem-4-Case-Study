@@ -1,0 +1,12 @@
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: portal-tgb
+  namespace: default
+spec:
+  serviceRef:
+    name: portal-service # Matches the name in your portal-app.yaml
+    port: 80
+  # You will need to grab this ARN from your Terraform outputs (from alb.tf)
+  targetGroupARN: arn:aws:elasticloadbalancing:eu-central-1:111122223333:targetgroup/dev-portal-tg/abc123xyz
+  targetType: ip

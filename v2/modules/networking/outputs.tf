@@ -19,7 +19,7 @@ output "alb_public_subnets" {
 }
 
 output "lambda_private_subnet" {
-    value = [aws_subnet.private["app"].id]
+    value = [aws_subnet.private["app-1"].id]
 }
 
 output "vpn_public_subnet" {
@@ -40,4 +40,8 @@ output "proxy_subnets" {
 
 output "grafana_discovery_service_arn" {
     value = aws_service_discovery_service.grafana.arn
+}
+
+output "eks_private_subnet" {
+    value = [aws_subnet.private["app-1"].id, aws_subnet.private["app-2"].id]
 }
