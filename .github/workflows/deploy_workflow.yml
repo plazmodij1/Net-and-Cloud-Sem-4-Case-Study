@@ -70,7 +70,7 @@ jobs:
             #    kubuectl apply -f ${{ github.workspace }}/v2/k8s/db-init-job.yml
             #    kubectl wait --for=condition=complete job/init-employee-table --timeout=120s
             
-            - name: Deploy Self-Service Portal
-              run: |
-                kubectl apply -f ./k8s/portal-deployment.yaml
-                kubectl apply -f ./k8s/portal-service.yaml
+            #- name: Deploy Self-Service Portal
+            #  run: |
+            #    kubectl apply -f ./k8s/portal-deployment.yaml
+            #    kubectl apply -f ./k8s/portal-service.yaml
