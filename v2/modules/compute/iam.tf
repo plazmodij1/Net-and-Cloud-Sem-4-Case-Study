@@ -52,7 +52,7 @@ resource "aws_iam_role_policy_attachment" "lambda_vpc_access" {
 #EKS Cluster Control Role
 data "aws_iam_policy_document" "eks_assume_role" {
   statement {
-    effect  = "Allows"
+    effect  = "Allow"
     actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
