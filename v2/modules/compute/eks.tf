@@ -3,7 +3,7 @@ resource "aws_eks_cluster" "main" {
     role_arn = aws_iam_role.eks_cluster_role.arn
 
     vpc_config {
-      subnet_ids = [var.eks_private_subnet]
+      subnet_ids = var.eks_private_subnet
       endpoint_private_access = true
       endpoint_public_access = true 
     }
@@ -18,7 +18,7 @@ resource "aws_eks_node_group" "spot_nodes" {
     cluster_name = aws_eks_cluster.main.name
     node_group_name = "${var.env}-spot-nodes"
     node_role_arn = aws_iam_role.eks_cluster_role.arn
-    subnet_ids = [var.eks_private_subnet]
+    subnet_ids = var.eks_private_subnet
 
     capacity_type = "SPOT"
     instance_types = ["t3.medium", "t3a.medium"]
