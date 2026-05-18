@@ -54,18 +54,6 @@ jobs:
                   -backend-config="region=${{ env.AWS_REGION }}" \
                   -backend-config="use_lockfile=true"
 
-            #- name: Update KubeConfig
-            #  run: |
-            #    aws eks update-kubeconfig \
-            #      --region eu-central-1 \
-            #      --name dev-cluster
-#
-            #- name: Delete Kubernetes Resources
-            #  run: |
-            #    kubectl delete -f ${{ github.workspace }}/v2/k8s/portal-deployment.yaml --ignore-not-found=true
-            #    kubectl delete -f ${{ github.workspace }}/v2/k8s/portal-service.yaml --ignore-not-found=true
-            #    kubectl delete -f ${{ github.workspace }}/v2/k8s/db-init-job.yaml --ignore-not-found=true
-
             - name: Terraform Destroy
               run: terraform destroy -auto-approve -var-file=${{ github.workspace }}/v2/global/variables.tfvars
 

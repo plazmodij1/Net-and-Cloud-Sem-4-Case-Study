@@ -10,10 +10,6 @@ variable "email" {
     type = string
 }
 
-variable "eks_cluster_name" {
-    type = string
-} 
-
 variable "cidr_block_vpc_private" {
     default = "10.0.0.0/16"
 }

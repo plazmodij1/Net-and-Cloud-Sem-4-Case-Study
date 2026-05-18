@@ -28,7 +28,7 @@ resource "aws_lb_target_group" "portal" {
   name = "${var.env}-portal-tg"
   port = 8080
   protocol = "HTTP"
-  vpc_id = var.vpc_private
+  vpc_id = var.vpc_public
   target_type = "ip"
 
   health_check {

@@ -4,17 +4,6 @@ resource "aws_subnet" "private" {
     vpc_id = aws_vpc.private.id
     cidr_block = each.value.cidr_block
     availability_zone = each.value.az
-    
-    tags = merge(
-        {
-            Name = "${var.env}-private-${each.value.tags}"
-            Environment = var.env
-        },
-        {
-            "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared"
-            "kubernetes.io/role/internal-elb"             = "1"
-        }
-    ) 
 }
 
 resource "aws_subnet" "public" {
@@ -23,17 +12,6 @@ resource "aws_subnet" "public" {
     vpc_id = aws_vpc.public.id
     cidr_block = each.value.cidr_block
     availability_zone = each.value.az
-
-    tags = merge(
-        {
-            Name = "${var.env}-private-${each.value.tags}"
-            Environment = var.env
-        },
-        {
-            "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared"
-            "kubernetes.io/role/internal-elb"             = "1"
-        }
-    )   
 }
 
 resource "aws_db_subnet_group" "main" {

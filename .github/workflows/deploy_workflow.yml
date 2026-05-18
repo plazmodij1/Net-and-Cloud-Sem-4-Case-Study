@@ -58,19 +58,3 @@ jobs:
 
             - name: Terraform Apply
               run: terraform apply -auto-approve tfplan
-            
-            #- name: Update KubeConfig
-            #  run: |
-            #    aws eks update-kubeconfig \
-            #      --region eu-central-1 \
-            #      --name dev-cluster
-#
-            #- name: Execute Database Initialization Job
-            #  run: |
-            #    kubuectl apply -f ${{ github.workspace }}/v2/k8s/db-init-job.yml
-            #    kubectl wait --for=condition=complete job/init-employee-table --timeout=120s
-            
-            #- name: Deploy Self-Service Portal
-            #  run: |
-            #    kubectl apply -f ./k8s/portal-deployment.yaml
-            #    kubectl apply -f ./k8s/portal-service.yaml

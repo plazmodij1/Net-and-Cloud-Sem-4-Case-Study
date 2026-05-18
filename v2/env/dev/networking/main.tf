@@ -21,5 +21,4 @@ module "networking" {
     env = var.env
     email = var.email
 
-    eks_cluster_name = "${var.env}-cluster"
 }

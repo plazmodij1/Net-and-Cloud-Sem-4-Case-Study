@@ -57,10 +57,3 @@ variable "vpn_public_subnet" {
   type = string
 }
 
-variable "eks_private_subnet"{
-  type = list(string)
-}
-
-variable "eks_cluster_name" {
-  type = string
-}
