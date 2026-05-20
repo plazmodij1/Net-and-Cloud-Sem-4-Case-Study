@@ -60,6 +60,7 @@ jobs:
               run: terraform apply -auto-approve tfplan
 
             - name: Initialize Database Schema (ECS Standalone Task)
+              if: matrix.module == 'compute'
               run: |
                 # Grabbing your private subnets and ECS security group from Terraform outputs
                 SUBNETS=$(terraform output -raw eks-portal-subnets)
