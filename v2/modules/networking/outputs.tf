@@ -41,3 +41,7 @@ output "proxy_subnets" {
 output "grafana_discovery_service_arn" {
     value = aws_service_discovery_service.grafana.arn
 }
+
+output "eks-portal-subnets"{
+    value = [aws_subnet.private["app-1"].id, aws_subnet.private["app-2"].id]
+}

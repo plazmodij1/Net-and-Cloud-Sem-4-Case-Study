@@ -58,3 +58,19 @@ jobs:
 
             - name: Terraform Apply
               run: terraform apply -auto-approve tfplan
+
+            - name: Initialize Database Schema (ECS Standalone Task)
+              run: |
+                # Grabbing your private subnets and ECS security group from Terraform outputs
+                SUBNETS=$(terraform output -raw eks-portal-subnets)
+                SG_ID=$(terraform output -raw ecs_portal_sg_id)
+                
+                echo "Triggering Fargate Task..."
+                aws ecs run-task \
+                  --cluster dev-fargate-cluster \
+                  --task-definition dev-db-init-task \
+                  --launch-type FARGATE \
+                  --network-configuration "awsvpcConfiguration={subnets=[$SUBNETS],securityGroups=[$SG_ID],assignPublicIp=DISABLED}"
+                
+                echo "Database initialization task dispatched!"
+              working-directory: ${{ github.workspace }}/v2/env/dev/compute

@@ -57,3 +57,10 @@ variable "vpn_public_subnet" {
   type = string
 }
 
+variable "rds_proxy_sg_id" {
+  type = string
+}
+
+variable "eks-portal-subnets" {
+  type = list(string)
+}

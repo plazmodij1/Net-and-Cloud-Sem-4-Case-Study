@@ -52,3 +52,8 @@ output "grafana_discovery_service_arn" {
     description = "ARN of the Grafana discovery service"
     value       = module.networking.grafana_discovery_service_arn
 }
+
+output "eks-portal-subnets" {
+    description = "IDS of subnets for the EKS portal"
+    value = module.networking.eks-portal-subnets
+}

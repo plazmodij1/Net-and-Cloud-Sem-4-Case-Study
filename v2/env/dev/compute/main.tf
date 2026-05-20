@@ -49,11 +49,13 @@ module "compute" {
     lambda_private_subnet = data.terraform_remote_state.networking.outputs.lambda_private_subnet
     alb_public_subnets = data.terraform_remote_state.networking.outputs.alb_public_subnets
     vpn_public_subnet = data.terraform_remote_state.networking.outputs.vpn_public_subnet
+    eks-portal-subnets = data.terraform_remote_state.networking.outputs.eks-portal-subnets
 
     #Storage linkages
     db_name = data.terraform_remote_state.storage.outputs.db_name
     proxy_endpoint = data.terraform_remote_state.storage.outputs.proxy_endpoint
     db_secret_arn = data.terraform_remote_state.storage.outputs.db_secret_arn
+    rds_proxy_sg_id = data.terraform_remote_state.storage.outputs.rds_proxy_sg_id
 
 
     lambda_zip = "../../../modules/compute/lambda"

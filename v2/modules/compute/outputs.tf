@@ -34,3 +34,7 @@ output "vpn_download_command" {
 output "alb_arn" {
   value = aws_lb.main.arn
 }
+
+output "ecs_portal_sg_id" {
+  value = ecs_portal_sg_id
+}

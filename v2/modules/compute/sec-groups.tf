@@ -58,5 +58,37 @@ resource "aws_security_group" "vpn" {
   }
 }
 
-# Security group for VPC Endpoints allowing inbound HTTPS traffic from Lambda and Fargate
+resource "aws_security_group" "ecs_portal" {
+  name = "${var.env}-ecs-portal-sg"
+  description = "Allow inbound traffic from ALB to ECS Fargate tasks"
+  vpc_id = var.vpc_public
 
+  ingress = {
+    description = "Allow traffic from ALB"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  egress = {
+    description = "Allow HTTPS for AWS API calls (Secrets Manager, ECR)"
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  egress = {
+    description = "Allow MySQL traffic to RDS Proxy"
+    from_port = 3306
+    to_port = 3306
+    protocol = "tcp"
+    security_groups = [var.rds_proxy_sg_id]
+  }
+
+  tags = {
+    Environment = var.env
+    Name = "${var.env}-ecs-execution-role"
+  }
+}
