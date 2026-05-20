@@ -15,4 +15,4 @@ output "alb_arn" {
 
 output "ecs_portal_sg_id" {
     value = module.compute.ecs_portal_sg_id
-}
+    }

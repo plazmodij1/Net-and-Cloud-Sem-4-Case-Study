@@ -69,6 +69,7 @@ resource "aws_security_group" "ecs_portal" {
   }
 }
 
+#Accept traffic from ALB
 resource "aws_vpc_security_group_ingress_rule" "ecs_portal_alb" {
   security_group_id = aws_security_group.ecs_portal.id
   description = "Allow traffic from ALB"
@@ -79,15 +80,17 @@ resource "aws_vpc_security_group_ingress_rule" "ecs_portal_alb" {
   referenced_security_group_id = aws_security_group.alb.id
 }
 
+#HTTPS for AWS API calls
 resource "aws_vpc_security_group_egress_rule" "ecs_portal_https" {
   security_group_id = aws_security_group.ecs_portal.id
   description = "Allow HTTPS for AWS API calls (Secrets Manager, ECR)"
   from_port = 443
   to_port = 443
   ip_protocol = "tcp"
-  cidr_ipv4 = ["0.0.0.0/0"]
+  cidr_ipv4 = "0.0.0.0/0"
 }
 
+#Allows MySQL traffic to RDS Proxy
 resource "aws_vpc_security_group_egress_rule" "ecs_portal_mysql" {
   security_group_id = aws_security_group.ecs_portal.id
   description = "Allow MySQL traffic to RDS Proxy"

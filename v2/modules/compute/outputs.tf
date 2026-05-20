@@ -36,5 +36,5 @@ output "alb_arn" {
 }
 
 output "ecs_portal_sg_id" {
-  value = ecs_portal_sg_id
+  value = aws_security_group.ecs_portal.id
 }

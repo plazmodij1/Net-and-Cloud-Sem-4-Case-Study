@@ -50,7 +50,7 @@ resource "aws_iam_role_policy_attachment" "lambda_vpc_access" {
 }
 
 #Execution role for the EKS
-resource "aws_aim_role" "ecs_execution_role" {
+resource "aws_iam_role" "ecs_execution_role" {
   name = "${var.env}-ecs-execution-role"
   assume_role_policy = data.aws_iam_policy_document.ecs_tasks_assume_role.json
 
@@ -61,7 +61,7 @@ resource "aws_aim_role" "ecs_execution_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
-  role = aws_aim_role.ecs_execution_role.name
+  role = aws_iam_role.ecs_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 

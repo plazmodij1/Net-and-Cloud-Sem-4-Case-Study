@@ -94,7 +94,7 @@ resource "aws_ecs_service" "portal" {
 resource "aws_ecs_task_definition" "db_init" {
     family = "${var.env}-db-init-task"
     network_mode = "awsvpc"
-    requires_compatibilities = [FARGATE]
+    requires_compatibilities = ["FARGATE"]
 
     cpu                      = "256"
     memory                   = "512"
