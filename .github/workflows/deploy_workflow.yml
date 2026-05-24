@@ -75,3 +75,55 @@ jobs:
                 
                 echo "Database initialization task dispatched!"
               working-directory: ${{ github.workspace }}/v2/env/dev/compute
+
+            - name: Bootstrap Cognito Test Users
+              if: matrix.module == 'compute'
+              env:
+                ADMIN_PASS: ${{ secrets.ADMIN_PASSWORD }}
+                EMP_PASS: ${{ secrets.EMP_PASSWORD }}
+              run: |
+                USER_POOL_ID=$(terraform output -raw cognito_user_pool_id)
+                
+                echo "🚀 Bootstrapping users into Cognito pool: $USER_POOL_ID"
+                
+                # --- 1. Admin User ---
+                # Note: Adding || true prevents the pipeline from crashing if the user already exists on subsequent runs
+                aws cognito-idp admin-create-user \
+                  --user-pool-id $USER_POOL_ID \
+                  --username admin@test.local \
+                  --user-attributes Name=email,Value=admin@test.local Name=email_verified,Value=true \
+                  --message-action SUPPRESS \
+                  --output text > /dev/null || true
+                  
+                aws cognito-idp admin-set-user-password \
+                  --user-pool-id $USER_POOL_ID \
+                  --username admin@test.local \
+                  --password "$ADMIN_PASS" \
+                  --permanent
+                  
+                aws cognito-idp admin-add-user-to-group \
+                  --user-pool-id $USER_POOL_ID \
+                  --username admin@test.local \
+                  --group-name HR-Admins
+
+                # --- 2. Standard Employee User ---
+                aws cognito-idp admin-create-user \
+                  --user-pool-id $USER_POOL_ID \
+                  --username employee@test.local \
+                  --user-attributes Name=email,Value=employee@test.local Name=email_verified,Value=true \
+                  --message-action SUPPRESS \
+                  --output text > /dev/null || true
+                  
+                aws cognito-idp admin-set-user-password \
+                  --user-pool-id $USER_POOL_ID \
+                  --username employee@test.local \
+                  --password "$EMP_PASS" \
+                  --permanent
+                  
+                aws cognito-idp admin-add-user-to-group \
+                  --user-pool-id $USER_POOL_ID \
+                  --username employee@test.local \
+                  --group-name Standard-Employees
+
+                echo "✅ Users successfully provisioned!"
+              working-directory: ${{ github.workspace }}/v2/env/dev/compute
