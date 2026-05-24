@@ -57,3 +57,27 @@ resource "aws_lb_listener" "main" {
     target_group_arn = aws_lb_target_group.portal.arn
   }
 }
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.main.arn
+  port = 443
+  protocol = "HTTPS"
+
+  default_action {
+    type = "authenticate-cognito"
+
+    authenticate_cognito {
+      user_pool_arn = aws_cognito_user_pool.portal_users.arn
+      user_pool_client_id = aws_cognito_user_pool_client.alb_client.id
+      user_pool_domain = aws_cognito_user_pool_domain.portal_domain.domain
+      session_cookie_name = "AWSELBAuthSessionCookie"
+      session_timeout = 3600
+    }
+
+  }
+
+  default_action {
+    type = "forward"
+    target_group_arn = aws_lb_target_group.portal.arn
+  }
+}

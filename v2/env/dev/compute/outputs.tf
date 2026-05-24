@@ -21,3 +21,7 @@ output "eks-portal-subnets" {
     description = "Private subnets passed through from the networking layer"
     value = data.terraform_remote_state.networking.outputs.eks-portal-subnets
 }
+output "cognito_user_pool_id" {
+  description = "The ID of the Cognito User Pool"
+  value       = module.compute.cognito_user_pool_id
+}

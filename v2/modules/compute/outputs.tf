@@ -38,3 +38,8 @@ output "alb_arn" {
 output "ecs_portal_sg_id" {
   value = aws_security_group.ecs_portal.id
 }
+
+output "cognito_user_pool_id" {
+  description = "The ID of the Cognito User Pool"
+  value       = aws_cognito_user_pool.portal_users.id
+}
