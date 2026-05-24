@@ -4,7 +4,7 @@ resource "tls_private_key" "portal_key" {
 }
 
 resource "tls_self_signed_cert" "portal_cert" {
-  private_key_pem = tls_private_key.portal_key.pem
+  private_key_pem = tls_private_key.portal_key.private_key_pem
 
   subject {
     common_name = aws_lb.main.dns_name
@@ -23,7 +23,7 @@ resource "tls_self_signed_cert" "portal_cert" {
 resource "aws_acm_certificate" "portal_cert" {
   private_key = tls_private_key.portal_key.private_key_pem
   certificate_body = tls_self_signed_cert.portal_cert.cert_pem
-  
+
   tags = {
     Environment = var.env
     Name        = "${var.env}-self-signed-cert"
