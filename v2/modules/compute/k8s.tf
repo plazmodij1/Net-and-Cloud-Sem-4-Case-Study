@@ -4,7 +4,7 @@ resource "aws_instance" "k8s_node" {
   subnet_id = var.lambda_private_subnet
 
   vpc_security_group_ids = [aws_security_group.k8s_sg.id]
-  iam_instance_profile = aws_iam_instance_profile.k8s_profile.namee
+  iam_instance_profile = aws_iam_instance_profile.k8s_profile.name
 
   user_data = <<-EOF
               #!/bin/bash
