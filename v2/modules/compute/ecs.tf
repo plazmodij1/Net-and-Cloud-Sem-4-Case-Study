@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "portal" {
 
     container_definitions = jsonencode([{
         name        = "portal-container"
-        image       = "nginx:alpine" ##################################################################################################################
+        image       = aws_ecr_repository.portal_repo.repository_url ##################################################################################################################
         essential   = true
 
         portMappings = [{
