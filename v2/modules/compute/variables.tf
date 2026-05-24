@@ -65,18 +65,18 @@ variable "eks-portal-subnets" {
   type = list(string)
 }
 
-variable "oidc_client_id" {
-  description = "The Client ID from AWS IAM Identity Center"
-  type        = string
-}
-
-variable "oidc_client_secret" {
-  description = "The Client Secret from AWS IAM Identity Center"
-  type        = string
-  sensitive   = true
-}
-
-variable "oidc_issuer" {
-  description = "The OIDC Issuer URL from IAM Identity Center"
-  type        = string
-}
+#variable "oidc_client_id" {
+#  description = "The Client ID from AWS IAM Identity Center"
+#  type        = string
+#}
+#
+#variable "oidc_client_secret" {
+#  description = "The Client Secret from AWS IAM Identity Center"
+#  type        = string
+#  sensitive   = true
+#}
+#
+#variable "oidc_issuer" {
+#  description = "The OIDC Issuer URL from IAM Identity Center"
+#  type        = string
+#}
