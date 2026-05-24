@@ -26,7 +26,7 @@ resource "aws_cognito_user_pool_domain" "portal_domain" {
 resource "aws_cognito_user_pool_client" "alb_client" {
   name = "${var.env}-alb-client"
   user_pool_id = aws_cognito_user_pool.portal_users.id
-  generate_secret = aws_lb_target_group.main
+  generate_secret = true
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows = ["code"]
   allowed_oauth_scopes                 = ["openid", "email", "profile"]
