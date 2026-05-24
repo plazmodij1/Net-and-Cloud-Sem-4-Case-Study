@@ -107,4 +107,25 @@ resource "aws_vpc_security_group_egress_rule" "ecs_portal_mysql" {
   referenced_security_group_id = var.rds_proxy_sg_id
 }
 
+#k8s security group
+resource "aws_security_group" "k8s_sg" {
+  name = "${var.env}-k8s-sg"
+  description = "Allow internal VPC traffic to Kubernetes"
+  vpc_id = var.vpc_private
 
+  # Allow your Node.js Fargate containers to talk to the K8s API (Port 6443)
+  ingress = {
+    from_port = 6443
+    to_port = 6443
+    protocol = "tcp"
+    cidr_blocks = [var.cidr_block_vpc_private]
+  }
+  
+  # Egress: Allow the cluster to download images from the internet
+  egress = {
+    from_port = 0
+    to_port = 0
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}

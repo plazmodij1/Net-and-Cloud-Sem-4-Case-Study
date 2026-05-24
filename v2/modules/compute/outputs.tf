@@ -47,3 +47,7 @@ output "cognito_user_pool_id" {
 output "ecr_repository_url" {
   value = aws_ecr_repository.portal_repo.repository_url
 }
+
+output "k8s_internal_ip" {
+  value = aws_instance.k8s_node.private_ip
+}

@@ -25,7 +25,7 @@ resource "aws_ecs_task_definition" "portal" {
 
     container_definitions = jsonencode([{
         name        = "portal-container"
-        image       = "${aws_ecr_repository.portal_repo.repository_url}:v2" ##################################################################################################################
+        image       = aws_ecr_repository.portal_repo.repository_url ##################################################################################################################
         essential   = true
 
         portMappings = [{
@@ -34,9 +34,11 @@ resource "aws_ecs_task_definition" "portal" {
             protocol        = "tcp"
         }]
 
-        environment = [
-            {name = "DB_HOST", value = var.proxy_endpoint },
-            {name = "DB_PORT", value = "3306"}
+        secrets = [
+            {
+                name = "KUBECONFIG_B64"
+                valueForm = aws_ssm_parameter.k3s_kubeconfig.arn
+            }
         ]
 
         logConfiguration = {
@@ -83,6 +85,8 @@ resource "aws_ecs_service" "portal" {
     container_name      = "portal-container"
     container_port      = 8080
   }
+
+    wait_for_steady_state = false
 
   tags = {
     Environment = var.env
@@ -153,4 +157,15 @@ resource "aws_ecs_task_definition" "db_init" {
         Environment = var.env
         Name        = "${var.env}-portal-task"
     }
+}
+
+
+resource "aws_ssm_parameter" "k3s_kubeconfig" {
+  name = "/dev-portal/k3s/kubeconfig"
+  type = "SecureString"
+  value = "waiting-for-ec2-boot" 
+
+  lifecycle {
+    ignore_changes = [ value ]
+  }
 }

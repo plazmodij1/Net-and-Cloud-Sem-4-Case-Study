@@ -50,11 +50,12 @@ module "compute" {
     vpc_public = data.terraform_remote_state.networking.outputs.vpc_public
     vpc_private = data.terraform_remote_state.networking.outputs.vpc_private
     cidr_block_vpc_public = data.terraform_remote_state.networking.outputs.cidr_block_vpc_public
+    cidr_block_vpc_private = data.terraform_remote_state.networking.outputs.cidr_block_vpc_private
     lambda_private_subnet = data.terraform_remote_state.networking.outputs.lambda_private_subnet
     alb_public_subnets = data.terraform_remote_state.networking.outputs.alb_public_subnets
     vpn_public_subnet = data.terraform_remote_state.networking.outputs.vpn_public_subnet
     eks-portal-subnets = data.terraform_remote_state.networking.outputs.eks-portal-subnets
-
+    
     #Storage linkages
     db_name = data.terraform_remote_state.storage.outputs.db_name
     proxy_endpoint = data.terraform_remote_state.storage.outputs.proxy_endpoint
