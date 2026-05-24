@@ -114,7 +114,7 @@ resource "aws_security_group" "k8s_sg" {
   vpc_id = var.vpc_private
 
   # Allow your Node.js Fargate containers to talk to the K8s API (Port 6443)
-  ingress = {
+  ingress {
     from_port = 6443
     to_port = 6443
     protocol = "tcp"
@@ -122,7 +122,7 @@ resource "aws_security_group" "k8s_sg" {
   }
   
   # Egress: Allow the cluster to download images from the internet
-  egress = {
+  egress {
     from_port = 0
     to_port = 0
     protocol = "tcp"
