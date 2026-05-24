@@ -63,7 +63,7 @@ jobs:
               if: matrix.module == 'compute'
               run: |
                 # Grabbing your private subnets and ECS security group from Terraform outputs
-                SUBNETS=$(terraform output -raw eks-portal-subnets)
+                SUBNETS=$(terraform output -json eks-portal-subnets | jq -r 'join(",")')
                 SG_ID=$(terraform output -raw ecs_portal_sg_id)
                 
                 echo "Triggering Fargate Task..."
