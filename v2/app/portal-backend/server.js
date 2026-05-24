@@ -33,20 +33,21 @@ app.get('/portal', (req, res) => {
     console.log(`User ${userEmail} logged in with groups: ${userGroups}`);
 
     // 4. Enforce RBAC for the Employee Lifecycle Automation
-    if (userGroups.includes('HR-Admins')) {
-      res.send(`
-        <h1>Welcome Admin: ${userEmail}</h1>
-        <button>Trigger Employee Onboarding</button>
-        <button>Trigger Employee Offboarding</button>
-      `);
-    } else if (userGroups.includes('Employee')) {
-      res.send(`
-        <h1>Welcome Employee: ${userEmail}</h1>
-        <p>View your personal profile and pay stubs here.</p>
-      `);
-    } else {
-      res.status(403).send("Forbidden: Unrecognized User Group");
-    }
+    // Grab the groups array, default to empty if none exist
+    const userGroups = accessData['cognito:groups'] || []; 
+
+    // --- TEMPORARY DEBUG SCREEN ---
+    return res.send(`
+      <h1>X-Ray Debug Mode</h1>
+      <p><b>Email:</b> ${userEmail}</p>
+      <p><b>Parsed Groups:</b> ${userGroups.join(', ')}</p>
+      <hr>
+      <h3>Raw ALB Data Payload:</h3>
+      <pre>${JSON.stringify(user, null, 2)}</pre>
+      <hr>
+      <h3>Raw Cognito Access Payload:</h3>
+      <pre>${JSON.stringify(accessData, null, 2)}</pre>
+    `);
 
   } catch (error) {
     console.error("Error decoding JWT:", error);
