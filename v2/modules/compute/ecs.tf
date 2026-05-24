@@ -2,36 +2,36 @@ resource "aws_ecs_cluster" "main" {
     name = "${var.env}-fargate-cluster"
 
     setting {
-      name = "containerInsights"
-      value = "enabled"
+      name      = "containerInsights"
+      value     = "enabled"
     }
 
     tags = {
         Environment = var.env
-        Name = "${var.env}-ecs-execution-role"
+        Name        = "${var.env}-ecs-execution-role"
   }
 }
 
 resource "aws_ecs_task_definition" "portal" {
-    family = "${var.env}-self-service-portal"
-    network_mode = "awsvpc"
-    requires_compatibilities = ["FARGATE"]
+    family                      = "${var.env}-self-service-portal"
+    network_mode                = "awsvpc"
+    requires_compatibilities    = ["FARGATE"]
 
-    cpu = "256"
-    memory = "512"
+    cpu                         = "256"
+    memory                      = "512"
 
-    execution_role_arn = aws_iam_role.ecs_execution_role.arn
-    task_role_arn = aws_iam_role.ecs_task_role.arn
+    execution_role_arn          = aws_iam_role.ecs_execution_role.arn
+    task_role_arn               = aws_iam_role.ecs_task_role.arn
 
     container_definitions = jsonencode([{
-        name = "portal-container"
-        image = "nginx:alpine" ##################################################################################################################
-        essential = true
+        name        = "portal-container"
+        image       = "nginx:alpine" ##################################################################################################################
+        essential   = true
 
         portMappings = [{
-            containerPort = 8080
-            hostPort = 8080
-            protocol = "tcp"
+            containerPort   = 8080
+            hostPort        = 8080
+            protocol        = "tcp"
         }]
 
         environment = [
