@@ -1,4 +1,4 @@
-resource "aws_ecr_repository" "portal-repo" {
+resource "aws_ecr_repository" "portal_repo" {
     name = "${var.env}-portal-backend"
     image_tag_mutability = "MUTABLE"
 
