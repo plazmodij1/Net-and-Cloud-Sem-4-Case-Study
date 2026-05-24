@@ -34,7 +34,7 @@ resource "aws_security_group" "lambda" {
 # Security group for the VPN EC2 instance allowing inbound SSH and VPN UDP traffic
 resource "aws_security_group" "vpn" {
   name   = "${var.env}-vpn-sg"
-  vpc_id = var.vpc_private
+  vpc_id = var.vpc_public
 
   ingress {
     from_port   = 22
