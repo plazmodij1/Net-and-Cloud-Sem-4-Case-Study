@@ -1,60 +1,77 @@
 const express = require('express');
 const app = express();
 
-// Automatically redirect root traffic to the portal
-app.get('/', (req, res) => {
-  res.redirect('/portal');
+// Robust JWT Decoder that handles Base64URL safely
+function decodeJWT(token) {
+  if (!token) return {};
+  try {
+    const base64Url = token.split('.')[1];
+    // Convert Base64URL to standard Base64 before decoding
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = Buffer.from(base64, 'base64').toString('utf-8');
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return { error: "Failed to parse JWT" };
+  }
+}
+
+app.get('/', (req, res) => res.redirect('/portal'));
+
+// 🚀 NEW: The X-Ray Debug Route
+app.get('/debug', (req, res) => {
+  const dataHeader = req.headers['x-amzn-oidc-data'];
+  const accessTokenHeader = req.headers['x-amzn-oidc-accesstoken'];
+  
+  const user = decodeJWT(dataHeader);
+  const accessData = decodeJWT(accessTokenHeader);
+  
+  res.send(`
+    <h1>Token X-Ray Machine</h1>
+    <hr>
+    <h3>Access Token (Should contain cognito:groups):</h3>
+    <pre>${JSON.stringify(accessData, null, 2)}</pre>
+    <hr>
+    <h3>ID Token (Data Header):</h3>
+    <pre>${JSON.stringify(user, null, 2)}</pre>
+  `);
 });
 
 app.get('/portal', (req, res) => {
-  // 1. Grab BOTH headers injected by the ALB
-  const dataHeader = req.headers['x-amzn-oidc-data'];             // Contains Email
-  const accessTokenHeader = req.headers['x-amzn-oidc-accesstoken']; // Contains Groups
+  const dataHeader = req.headers['x-amzn-oidc-data'];
+  const accessTokenHeader = req.headers['x-amzn-oidc-accesstoken'];
   
   if (!dataHeader || !accessTokenHeader) {
     return res.status(401).send("Unauthorized: Missing ALB Identity Headers");
   }
 
   try {
-    // 2. Decode the User Data (To get the Email)
-    const dataPayloadBase64 = dataHeader.split('.')[1];
-    const decodedDataPayload = Buffer.from(dataPayloadBase64, 'base64').toString('utf-8');
-    const user = JSON.parse(decodedDataPayload);
-    const userEmail = user.email;
-
-    // 3. Decode the Access Token (To get the Groups)
-    const accessPayloadBase64 = accessTokenHeader.split('.')[1];
-    const decodedAccessPayload = Buffer.from(accessPayloadBase64, 'base64').toString('utf-8');
-    const accessData = JSON.parse(decodedAccessPayload);
+    const user = decodeJWT(dataHeader);
+    const accessData = decodeJWT(accessTokenHeader);
     
-    // Grab the groups array, default to empty if none exist
+    const userEmail = user.email || 'Unknown Email';
     const userGroups = accessData['cognito:groups'] || []; 
 
-    console.log(`User ${userEmail} logged in with groups: ${userGroups}`);
+    // Better logging: JSON.stringify ensures empty arrays print clearly as []
+    console.log(`User ${userEmail} logged in with groups: ${JSON.stringify(userGroups)}`);
 
-    // 4. Enforce RBAC for the Employee Lifecycle Automation
-    // Grab the groups array, default to empty if none exist
-    const userGroups = accessData['cognito:groups'] || []; 
-
-    // --- TEMPORARY DEBUG SCREEN ---
-    return res.send(`
-      <h1>X-Ray Debug Mode</h1>
-      <p><b>Email:</b> ${userEmail}</p>
-      <p><b>Parsed Groups:</b> ${userGroups.join(', ')}</p>
-      <hr>
-      <h3>Raw ALB Data Payload:</h3>
-      <pre>${JSON.stringify(user, null, 2)}</pre>
-      <hr>
-      <h3>Raw Cognito Access Payload:</h3>
-      <pre>${JSON.stringify(accessData, null, 2)}</pre>
-    `);
-
+    if (userGroups.includes('HR-Admins')) {
+      res.send(`
+        <h1>Welcome Admin: ${userEmail}</h1>
+        <button>Trigger Employee Onboarding</button>
+        <button>Trigger Employee Offboarding</button>
+      `);
+    } else if (userGroups.includes('Employee')) {
+      res.send(`
+        <h1>Welcome Employee: ${userEmail}</h1>
+        <p>View your personal profile and pay stubs here.</p>
+      `);
+    } else {
+      res.status(403).send("Forbidden: Unrecognized User Group");
+    }
   } catch (error) {
-    console.error("Error decoding JWT:", error);
+    console.error("Server Crash:", error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-app.listen(8080, () => {
-  console.log('Self-Service Portal running on port 8080');
-});
+app.listen(8080, () => console.log('Self-Service Portal running on port 8080'));
