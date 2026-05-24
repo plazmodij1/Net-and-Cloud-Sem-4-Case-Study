@@ -77,7 +77,7 @@ resource "aws_vpc_security_group_ingress_rule" "ecs_portal_alb" {
   to_port = 8080
   ip_protocol = "tcp"
 
-  referenced_security_group_id = aws_security_group.alb.id
+  cidr_ipv4 = var.cidr_block_vpc_public
 }
 
 #HTTPS for AWS API calls
