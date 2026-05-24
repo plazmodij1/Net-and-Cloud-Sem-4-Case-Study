@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "portal-repo" {
-    name = "${var-env}-portal-backend"
+    name = "${var.env}-portal-backend"
     image_tag_mutability = "MUTABLE"
 
     force_delete = true
