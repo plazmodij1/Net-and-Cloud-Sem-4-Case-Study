@@ -42,8 +42,8 @@ resource "aws_ecs_task_definition" "portal" {
         logConfiguration = {
             logDriver = "awslogs"
             options = {
-                "awslogs-group" = "/ecs/${var.env}-portal"
-                "awslogs-region" = var.region
+                "awslogs-group"         = "/ecs/${var.env}-portal"
+                "awslogs-region"        = var.region
                 "awslogs-stream-prefix" = "ecs"
             }
         }
@@ -51,7 +51,7 @@ resource "aws_ecs_task_definition" "portal" {
 
     tags = {
         Environment = var.env
-        Name = "${var.env}-portal-task"
+        Name        = "${var.env}-portal-task"
     }
 }
 
@@ -61,50 +61,50 @@ resource "aws_cloudwatch_log_group" "portal_logs" {
 
     tags = {
         Environment = var.env
-        Name = "${var.env}-portal-task"
+        Name        = "${var.env}-portal-task"
     }
 }
 
 resource "aws_ecs_service" "portal" {
-  name = "${var.env}-portal-service"
-  cluster = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.portal.arn
-  desired_count = 2
-  launch_type = "FARGATE"
+  name              = "${var.env}-portal-service"
+  cluster           = aws_ecs_cluster.main.id
+  task_definition   = aws_ecs_task_definition.portal.arn
+  desired_count     = 2
+  launch_type       = "FARGATE"
   
   network_configuration {
-    subnets = var.eks-portal-subnets
-    security_groups = [aws_security_group.ecs_portal.id]
-    assign_public_ip = false
+    subnets             = var.eks-portal-subnets
+    security_groups     = [aws_security_group.ecs_portal.id]
+    assign_public_ip    = false
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.portal.arn
-    container_name = "portal-container"
-    container_port = 8080
+    target_group_arn    = aws_lb_target_group.portal.arn
+    container_name      = "portal-container"
+    container_port      = 8080
   }
 
   tags = {
     Environment = var.env
-    Name = "${var.env}-portal-task"
+    Name        = "${var.env}-portal-task"
   }
 }
 
 #ECS Standalone Task to fill the database tables
 resource "aws_ecs_task_definition" "db_init" {
     family = "${var.env}-db-init-task"
-    network_mode = "awsvpc"
-    requires_compatibilities = ["FARGATE"]
+    network_mode                = "awsvpc"
+    requires_compatibilities    = ["FARGATE"]
 
-    cpu                      = "256"
-    memory                   = "512"
+    cpu                         = "256"
+    memory                      = "512"
 
-    execution_role_arn       = aws_iam_role.ecs_execution_role.arn
-    task_role_arn            = aws_iam_role.ecs_task_role.arn
+    execution_role_arn          = aws_iam_role.ecs_execution_role.arn
+    task_role_arn               = aws_iam_role.ecs_task_role.arn
 
     container_definitions = jsonencode([{
-        name = "db-initializer"
-        image = "alpine:3.18"
+        name      = "db-initializer"
+        image     = "alpine:3.18"
         essential = true
 
         environment = [
@@ -143,14 +143,14 @@ resource "aws_ecs_task_definition" "db_init" {
         logConfiguration = {
             logDriver = "awslogs"
             options = {
-                "awslogs-group" = aws_cloudwatch_log_group.portal_logs.name
-                "awslogs-region" = var.region
+                "awslogs-group"         = aws_cloudwatch_log_group.portal_logs.name
+                "awslogs-region"        = var.region
                 "awslogs-stream-prefix" = "ecsdb-init"
             }
         }
     }])
     tags = {
         Environment = var.env
-        Name = "${var.env}-portal-task"
+        Name        = "${var.env}-portal-task"
     }
 }
