@@ -34,7 +34,7 @@ resource "aws_security_group" "lambda" {
 # Security group for the VPN EC2 instance allowing inbound SSH and VPN UDP traffic
 resource "aws_security_group" "vpn" {
   name   = "${var.env}-vpn-sg"
-  vpc_id = var.vpc_public
+  vpc_id = var.vpc_private
 
   ingress {
     from_port   = 22
@@ -61,7 +61,7 @@ resource "aws_security_group" "vpn" {
 resource "aws_security_group" "ecs_portal" {
   name = "${var.env}-ecs-portal-sg"
   description = "Allow inbound traffic from ALB to ECS Fargate tasks"
-  vpc_id = var.vpc_public
+  vpc_id = var.vpc_private
 
   tags = {
     Environment = var.env
