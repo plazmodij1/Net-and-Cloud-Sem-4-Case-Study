@@ -1,0 +1,18 @@
+# Use the official, lightweight Node.js image
+FROM node:18-alpine
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install --production
+
+# Copy your actual application code (server.js)
+COPY . .
+
+# Expose the exact port your ALB is looking for
+EXPOSE 8080
+
+# Start the application
+CMD [ "node", "server.js" ]
