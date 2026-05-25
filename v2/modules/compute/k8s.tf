@@ -6,7 +6,7 @@ resource "aws_instance" "k8s_node" {
   associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.k8s_sg.id]
   iam_instance_profile = aws_iam_instance_profile.k8s_profile.name
-
+#
   user_data = <<-EOF
               #!/bin/bash
               apt-get update -y
