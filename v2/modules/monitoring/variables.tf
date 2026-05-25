@@ -18,10 +18,6 @@ variable "cidr_block_vpc_public" {
     type = string
 }
 
-variable "lambda_private_subnet" {
-    type = list(string)
-}
-
 variable "ecr_repo_name" {
     default = "dev-grafana-repo"
 }
