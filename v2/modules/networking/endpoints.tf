@@ -59,7 +59,7 @@ resource "aws_vpc_endpoint" "cloudwatch" {
 
 
 resource "aws_vpc_endpoint" "ssm" {
-  vpc_id = aws_vpc.private
+  vpc_id = aws_vpc.private.id
 
   service_name = "com.amazonaws.eu-central-1.ssm"
   vpc_endpoint_type = "Interface"
