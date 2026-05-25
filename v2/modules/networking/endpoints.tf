@@ -1,4 +1,3 @@
-
 resource "aws_vpc_endpoint" "secrets_manager" {
     vpc_id              = aws_vpc.private.id
     service_name        = "com.amazonaws.${var.region}.secretsmanager"
@@ -58,3 +57,14 @@ resource "aws_vpc_endpoint" "cloudwatch" {
     private_dns_enabled = true
 }
 
+
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id = aws_vpc.private
+
+  service_name = "com.amazonaws.eu-central-1.ssm"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = [aws_subnet.private["app-1"].id, aws_subnet.private["app-2"].id]
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
+  private_dns_enabled = true
+}
