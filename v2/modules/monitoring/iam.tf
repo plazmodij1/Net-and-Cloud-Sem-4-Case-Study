@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecs_execution_grafana" {
-    name = "${var.env}-ecs-execution-role"
+    name = "${var.env}-ecs-execution-role-grafana"
     assume_role_policy = jsonencode({
         "Version": "2012-10-17",
         "Statement": [{
@@ -11,7 +11,7 @@ resource "aws_iam_role" "ecs_execution_grafana" {
 }
 
 resource "aws_iam_role" "ecs_task_grafana" {
-    name = "${var.env}-ecs-task-role"
+    name = "${var.env}-ecs-task-role-grafana"
     assume_role_policy = jsonencode({
         "Version" = "2012-10-17"
         "Statement" = [{

@@ -1,8 +1,9 @@
 resource "aws_instance" "k8s_node" {
   ami = data.aws_ami.ubuntu.id
   instance_type = "t3.small"
-  subnet_id = var.lambda_private_subnet
+  subnet_id = var.vpn_public_subnet
 
+  associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.k8s_sg.id]
   iam_instance_profile = aws_iam_instance_profile.k8s_profile.name
 
