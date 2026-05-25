@@ -19,7 +19,7 @@ output "alb_public_subnets" {
 }
 
 output "lambda_private_subnet" {
-    value = [aws_subnet.private["app-1"].id]
+    value = aws_subnet.private["app-1"].id
 }
 
 output "vpn_public_subnet" {
