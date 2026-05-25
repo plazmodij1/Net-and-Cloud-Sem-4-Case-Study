@@ -29,3 +29,13 @@ output "cognito_user_pool_id" {
 output "ecr_repository_url" {
   value = module.compute.ecr_repository_url
 }
+
+output "ecs_cluster_name" {
+  description = "The name of the ECS cluster"
+  value       = module.compute.ecs_cluster_name
+}
+
+output "ecs_service_name" {
+  description = "The name of the ECS service"
+  value       = module.compute.ecs_service_name
+}
