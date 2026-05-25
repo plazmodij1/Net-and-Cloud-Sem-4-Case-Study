@@ -143,3 +143,24 @@ resource "aws_iam_role_policy" "ecs_ssm_read_policy" {
     ]
   })
 }
+
+resource "aws_iam_role_policy" "k8s_ssm_write_policy" {
+  name = "k8s-ssm-write-policy"
+  
+  # 👇 Change this to match the actual name of your EC2 instance's IAM role
+  role = aws_iam_role.k8s_node_role.name 
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:PutParameter"
+        ]
+        # 👇 This restricts the server so it can ONLY overwrite this one specific parameter
+        Resource = "arn:aws:ssm:eu-central-1:${data.aws_caller_identity.current.account_id}:parameter/dev-portal/k3s/kubeconfig"
+      }
+    ]
+  })
+}
