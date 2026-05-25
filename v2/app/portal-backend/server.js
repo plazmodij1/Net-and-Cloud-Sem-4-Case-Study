@@ -1,5 +1,11 @@
 const express = require('express');
 const app = express();
+const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
+const k8s = require('@kubernetes/client-node');
+const fs = require('fs');
+
+// Initialize the AWS SSM Client (Fargate automatically uses the container's IAM role!)
+const ssmClient = new SSMClient({ region: "eu-central-1" });
 
 // Robust JWT Decoder that handles Base64URL safely
 function decodeJWT(token) {
@@ -88,24 +94,51 @@ app.get('/portal', (req, res) => {
   }
 });
 
-// 🚀 NEW: The route that handles the button click
 app.post('/api/onboard', async (req, res) => {
   console.log("Received request to trigger K8s onboarding...");
   
   try {
-    // ==========================================
-    // 1. Fetch the Base64 String from AWS SSM
-    // 2. Decode it into a kubeconfig
-    // 3. Authenticate with your EC2 K3s Cluster
-    // 4. Spin up the Alpine Job
-    // ==========================================
+    // 1. Fetch the Base64 String from AWS Systems Manager
+    console.log("Fetching Kubeconfig from SSM...");
+    const command = new GetParameterCommand({
+      Name: "/dev-portal/k3s/kubeconfig",
+      WithDecryption: true
+    });
+    const ssmResponse = await ssmClient.send(command);
     
-    // For now, let's just send a success message to prove the wiring works!
-    res.status(200).send("Kubernetes Job Dispatched Successfully!");
+    // 2. Decode the Base64 string back into standard YAML
+    const base64Config = ssmResponse.Parameter.Value;
+    const yamlConfig = Buffer.from(base64Config, 'base64').toString('utf-8');
+
+    // 3. Authenticate the Kubernetes Client
+    const kc = new k8s.KubeConfig();
+    kc.loadFromString(yamlConfig);
+    const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+
+    // 4. Spin up the Onboarding Job (A simple Alpine pod for testing)
+    console.log("Dispatching job to K3s cluster...");
+    const podManifest = {
+      apiVersion: 'v1',
+      kind: 'Pod',
+      metadata: { name: `onboard-job-${Date.now()}` },
+      spec: {
+        containers: [{
+          name: 'onboard-task',
+          image: 'alpine',
+          command: ['echo', 'Employee Onboarding Process Initiated!']
+        }],
+        restartPolicy: 'Never'
+      }
+    };
+
+    await k8sApi.createNamespacedPod('default', podManifest);
+    
+    console.log("Job successfully dispatched!");
+    res.status(200).send("Kubernetes Pod Created Successfully!");
     
   } catch (error) {
     console.error("K8s Trigger Error:", error);
-    res.status(500).send("Failed to dispatch job to cluster.");
+    res.status(500).send("Failed to dispatch job to cluster. Check backend logs.");
   }
 });
 
