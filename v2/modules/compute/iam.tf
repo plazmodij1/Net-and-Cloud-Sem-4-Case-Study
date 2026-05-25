@@ -121,3 +121,25 @@ resource "aws_iam_instance_profile" "k8s_profile" {
   name = "k8s-node-profile"
   role = aws_iam_role.k8s_node_role.name
 }
+
+#Fargate permission to get SSM parameters
+resource "aws_iam_role_policy" "ecs_ssm_read_policy" {
+  name = "ecs-ssm-read-policy"
+  
+  # Ensure this points to the exact name of your execution role resource!
+  role = aws_iam_role.ecs_execution_role.name 
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameters"
+        ]
+        # This dynamically targets the exact secret we created earlier
+        Resource = aws_ssm_parameter.k3s_kubeconfig.arn
+      }
+    ]
+  })
+}
