@@ -36,8 +36,8 @@ resource "aws_ecs_task_definition" "portal" {
 
         secrets = [
             {
-                name = "KUBECONFIG_B64"
-                valueForm = aws_ssm_parameter.k3s_kubeconfig.arn
+                name      = "KUBECONFIG_B64"
+                valueFrom = aws_ssm_parameter.k3s_kubeconfig.arn
             }
         ]
 
