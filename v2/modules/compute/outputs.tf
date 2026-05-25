@@ -51,3 +51,13 @@ output "ecr_repository_url" {
 output "k8s_internal_ip" {
   value = aws_instance.k8s_node.private_ip
 }
+
+output "ecs_cluster_name" {
+  description = "The name of the ECS cluster"
+  value       = aws_ecs_cluster.main.name
+}
+
+output "ecs_service_name" {
+  description = "The name of the ECS service"
+  value       = aws_ecs_service.portal.name
+}

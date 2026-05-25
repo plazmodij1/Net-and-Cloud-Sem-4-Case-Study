@@ -83,11 +83,17 @@ jobs:
             - name: Kickstart Fargate Service
               if: matrix.module == 'compute'
               run: |
+                echo "Fetching dynamic cluster and service names from Terraform..."
+                CLUSTER_NAME=$(terraform output -raw ecs_cluster_name)
+                SERVICE_NAME=$(terraform output -raw ecs_service_name)
+                
+                echo "Targeting Cluster: $CLUSTER_NAME"
+                echo "Targeting Service: $SERVICE_NAME"
+                
                 echo "Forcing ECS to pull the fresh image..."
-                # Note: Used the cluster name from your DB Init step
                 aws ecs update-service \
-                  --cluster dev-fargate-cluster \
-                  --service portal-service \
+                  --cluster $CLUSTER_NAME \
+                  --service $SERVICE_NAME \
                   --force-new-deployment
 
 
