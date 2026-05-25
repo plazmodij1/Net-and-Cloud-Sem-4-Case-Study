@@ -57,20 +57,55 @@ app.get('/portal', (req, res) => {
     if (userGroups.includes('HR-Admins')) {
       res.send(`
         <h1>Welcome Admin: ${userEmail}</h1>
-        <button>Trigger Employee Onboarding</button>
-        <button>Trigger Employee Offboarding</button>
+        <button id="onboard-btn">Trigger Employee Onboarding (K8s)</button>
+        <p id="status-message"></p>
+
+        <script>
+          document.getElementById('onboard-btn').addEventListener('click', async () => {
+            const statusDiv = document.getElementById('status-message');
+            statusDiv.innerHTML = "⏳ Contacting Kubernetes Cluster...";
+            
+            try {
+              // This sends the request to your backend Node.js server
+              const response = await fetch('/api/onboard', { method: 'POST' });
+              const result = await response.text();
+              
+              if (response.ok) {
+                statusDiv.innerHTML = "✅ " + result;
+              } else {
+                statusDiv.innerHTML = "❌ Failed: " + result;
+              }
+            } catch (err) {
+              statusDiv.innerHTML = "❌ Network Error: " + err.message;
+            }
+          });
+        </script>
       `);
-    } else if (userGroups.includes('Employee')) {
-      res.send(`
-        <h1>Welcome Employee: ${userEmail}</h1>
-        <p>View your personal profile and pay stubs here.</p>
-      `);
-    } else {
-      res.status(403).send("Forbidden: Unrecognized User Group");
     }
   } catch (error) {
     console.error("Server Crash:", error);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+// 🚀 NEW: The route that handles the button click
+app.post('/api/onboard', async (req, res) => {
+  console.log("Received request to trigger K8s onboarding...");
+  
+  try {
+    // ==========================================
+    // 1. Fetch the Base64 String from AWS SSM
+    // 2. Decode it into a kubeconfig
+    // 3. Authenticate with your EC2 K3s Cluster
+    // 4. Spin up the Alpine Job
+    // ==========================================
+    
+    // For now, let's just send a success message to prove the wiring works!
+    res.status(200).send("Kubernetes Job Dispatched Successfully!");
+    
+  } catch (error) {
+    console.error("K8s Trigger Error:", error);
+    res.status(500).send("Failed to dispatch job to cluster.");
   }
 });
 
