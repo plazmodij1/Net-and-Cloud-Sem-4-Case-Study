@@ -57,3 +57,7 @@ output "eks-portal-subnets" {
     description = "IDS of subnets for the EKS portal"
     value = module.networking.eks-portal-subnets
 }
+
+output "k8s-subnet" {
+    value = module.networking.k8s-subnet
+}

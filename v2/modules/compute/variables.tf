@@ -68,3 +68,7 @@ variable "rds_proxy_sg_id" {
 variable "eks-portal-subnets" {
   type = list(string)
 }
+
+variable "k8s-subnet" {
+  type = string
+}
