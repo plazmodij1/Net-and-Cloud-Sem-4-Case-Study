@@ -40,3 +40,5 @@ Thumbs.db
 *.swp
 
 !variables.tfvars
+
+node_modules/

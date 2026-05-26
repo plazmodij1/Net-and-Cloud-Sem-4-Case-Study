@@ -11,6 +11,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@aws-sdk/client-ssm": "^3.1053.0",
+    "@kubernetes/client-node": "^1.4.0",
     "express": "^5.2.1"
   }
 }
