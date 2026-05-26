@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
-const k8s = require('@kubernetes/client-node');
 const fs = require('fs');
 
 // Initialize the AWS SSM Client (Fargate automatically uses the container's IAM role!)
@@ -23,24 +22,6 @@ function decodeJWT(token) {
 
 app.get('/', (req, res) => res.redirect('/portal'));
 
-// 🚀 NEW: The X-Ray Debug Route
-app.get('/debug', (req, res) => {
-  const dataHeader = req.headers['x-amzn-oidc-data'];
-  const accessTokenHeader = req.headers['x-amzn-oidc-accesstoken'];
-  
-  const user = decodeJWT(dataHeader);
-  const accessData = decodeJWT(accessTokenHeader);
-  
-  res.send(`
-    <h1>Token X-Ray Machine</h1>
-    <hr>
-    <h3>Access Token (Should contain cognito:groups):</h3>
-    <pre>${JSON.stringify(accessData, null, 2)}</pre>
-    <hr>
-    <h3>ID Token (Data Header):</h3>
-    <pre>${JSON.stringify(user, null, 2)}</pre>
-  `);
-});
 
 app.get('/portal', (req, res) => {
   const dataHeader = req.headers['x-amzn-oidc-data'];
@@ -99,6 +80,7 @@ app.post('/api/onboard', async (req, res) => {
   
   try {
     // 1. Fetch the Base64 String from AWS Systems Manager
+    const k8s = await import('@kubernetes/client-node');
     console.log("Fetching Kubeconfig from SSM...");
     const command = new GetParameterCommand({
       Name: "/dev-portal/k3s/kubeconfig",
