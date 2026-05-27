@@ -122,6 +122,11 @@ resource "aws_iam_instance_profile" "k8s_profile" {
   role = aws_iam_role.k8s_node_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "k8s_ssm_core" {
+  role       = aws_iam_role.k8s_node_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 ##Fargate permission to get SSM parameters
 #resource "aws_iam_role_policy" "ecs_ssm_read" {
 #  name = "${var.env}-ecs-ssm-read-policy"
