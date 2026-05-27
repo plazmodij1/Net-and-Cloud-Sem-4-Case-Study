@@ -112,8 +112,11 @@ app.post('/api/onboard', async (req, res) => {
         restartPolicy: 'Never'
       }
     };
-
-    await k8sApi.createNamespacedPod('default', podManifest);
+    
+    await k8sApi.createNamespacedPod({
+      namespace: 'default',
+      body: podManifest
+    });
     
     console.log("Job successfully dispatched!");
     res.status(200).send("Kubernetes Pod Created Successfully!");
