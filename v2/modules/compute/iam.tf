@@ -186,3 +186,28 @@ resource "aws_iam_role_policy" "k8s_ssm_write_policy" {
     ]
   })
 }
+
+# The Policy for the ECS Agent (Execution Role)
+resource "aws_iam_policy" "ecs_execution_ssm_read" {
+  name = "${var.env}-ecs-exec-ssm-policy"
+  description = " Allow ECS agent to pull secrets from SSM during boot"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = [
+          "ssm:GetParameters",
+          "ssm:GetParameter"
+        ]
+        Resource = "arn:aws:ssm:*:*:parameter/dev-portal/k3s/kubeconfig"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_execution_ssm_attach" {
+  role       = aws_iam_role.ecs_execution_role.name 
+  policy_arn = aws_iam_policy.ecs_execution_ssm_read.arn
+}
