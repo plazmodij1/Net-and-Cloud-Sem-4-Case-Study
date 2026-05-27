@@ -114,7 +114,7 @@ resource "aws_vpc_security_group_egress_rule" "ecs_portal_k8s" {
   from_port = 6443 
   to_port = 6443
   ip_protocol = "tcp"
-  referenced_security_group_id = aws_security_group.k8s_sg.id
+  cidr_ipv4 = var.cidr_block_vpc_public
 }
 
 #k8s security group
