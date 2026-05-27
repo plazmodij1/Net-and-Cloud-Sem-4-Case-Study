@@ -107,6 +107,16 @@ resource "aws_vpc_security_group_egress_rule" "ecs_portal_mysql" {
   referenced_security_group_id = var.rds_proxy_sg_id
 }
 
+#Allows Fargate to talk to K8s API
+resource "aws_vpc_security_group_egress_rule" "ecs_portal_k8s" {
+  security_group_id = aws_security_group.ecs_portal.id
+  description = "Allow Fargate to talk to K8s API"
+  from_port = 6443 
+  to_port = 6443
+  ip_protocol = "tcp"
+  referenced_security_group_id = aws_security_group.k8s_sg.id
+}
+
 #k8s security group
 resource "aws_security_group" "k8s_sg" {
   name = "${var.env}-k8s-sg"
