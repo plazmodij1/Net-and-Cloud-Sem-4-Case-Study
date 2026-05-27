@@ -118,7 +118,7 @@ resource "aws_security_group" "k8s_sg" {
     from_port = 6443
     to_port = 6443
     protocol = "tcp"
-    cidr_blocks = [var.cidr_block_vpc_public]
+    cidr_blocks = [var.cidr_block_vpc_private]
   }
   
   # Egress: Allow the cluster to download images from the internet
