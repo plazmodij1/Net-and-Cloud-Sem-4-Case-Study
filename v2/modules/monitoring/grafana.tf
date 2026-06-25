@@ -18,7 +18,7 @@ resource "aws_ecs_task_definition" "grafana" {
 
     container_definitions = jsonencode([{
         name        = var.grafana_image
-        image       = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}..amazonaws.com/${var.grafana_image}:latest"
+        image       = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}..amazonaws.com/${var.ecr_repo_name}:latest"
         essential   = true
 
         portMappings = [{
